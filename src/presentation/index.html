@@ -4,59 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurante 641A</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-    <header>
-        <h1>Restaurante 641A</h1>
-        <nav>
-            <a href="#inicio">Inicio</a>
-            <a href="#menu">Menú</a>
-            <a href="#contacto">Contacto</a>
-        </nav>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#inicio">Restaurante <span class="marca-acento">Los mas caleños</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#menu">Menú</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO / INICIO -->
+    <header id="inicio" class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <p class="eyebrow">Cocina de barrio, hecha con cuidado</p>
+                    <h1>Buena mesa,<br>buena compañía.</h1>
+                    <p class="hero-texto">
+                        En el nuestro restaurante Los mas caleños, cocinamos todos los días desde cero: pan horneado en casa,
+                        salsas propias y porciones pensadas para compartir. Ven a comer
+                        como en casa, o pide para que te lo llevemos.
+                    </p>
+                    <button class="btn btn-cta" onclick="mostrarMensaje()">Hacer pedido</button>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block">
+                    <div class="hero-plato" aria-hidden="true">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="95" class="plato-borde"/>
+                            <circle cx="100" cy="100" r="72" class="plato-interior"/>
+                            <circle cx="100" cy="100" r="38" class="plato-centro"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section id="inicio">
-            <h2>Bienvenidos</h2>
-            <p>Disfruta de nuestros platos y bebidas.</p>
-            <button onclick="mostrarMensaje()">Hacer pedido</button>
+        <!-- MENÚ -->
+        <section id="menu" class="seccion-menu">
+            <div class="container">
+                <p class="eyebrow text-center">Lo que preparamos hoy</p>
+                <h2 class="titulo-seccion text-center">Nuestro menú</h2>
+
+                <div class="lista-menu">
+
+                    <div class="row plato-item">
+                        <div class="col-9">
+                            <h3>Hamburguesa especial</h3>
+                            <p>Carne de res, queso madurado, vegetales frescos y papas rústicas.</p>
+                        </div>
+                        <div class="col-3 text-end">
+                            <span class="precio">$25.000</span>
+                        </div>
+                    </div>
+
+                    <div class="row plato-item">
+                        <div class="col-9">
+                            <h3>Pizza </h3>
+                            <p>Masa artesanal con queso mozzarella, jamón y pepperoni.</p>
+                        </div>
+                        <div class="col-3 text-end">
+                            <span class="precio">$30.000</span>
+                        </div>
+                    </div>
+
+                    <div class="row plato-item">
+                        <div class="col-9">
+                            <h3>Pollo a la plancha</h3>
+                            <p>Pechuga a la plancha con arroz, ensalada fresca y papas.</p>
+                        </div>
+                        <div class="col-3 text-end">
+                            <span class="precio">$28.000</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
-        <section id="menu">
-            <h2>Nuestro menú</h2>
-
-            <div class="plato">
-                <h3>Hamburguesa especial</h3>
-                <p>Hamburguesa con carne, queso, verduras y papas.</p>
-                <strong>$25.000</strong>
+        <!-- CONTACTO -->
+        <section id="contacto" class="seccion-contacto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="eyebrow">¿Dónde estamos?</p>
+                        <h2 class="titulo-seccion">Contacto</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="dato-contacto">Teléfono<br><strong>302 626 1912</strong></p>
+                        <p class="dato-contacto">Dirección<br><strong>Cali, Colombia</strong></p>
+                    </div>
+                </div>
             </div>
-
-            <div class="plato">
-                <h3>Pizza 641A</h3>
-                <p>Pizza con queso, jamón y pepperoni.</p>
-                <strong>$30.000</strong>
-            </div>
-
-            <div class="plato">
-                <h3>Pollo a la plancha</h3>
-                <p>Pollo acompañado de arroz, ensalada y papas.</p>
-                <strong>$28.000</strong>
-            </div>
-        </section>
-
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <p>Teléfono: 300 000 0000</p>
-            <p>Dirección: Cali, Colombia</p>
         </section>
     </main>
 
     <footer>
-        <p>Proyecto Restaurante - Grupo 641A</p>
+        <p>Proyecto Restaurante &middot; Grupo 641A</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

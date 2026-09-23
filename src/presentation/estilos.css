@@ -1,74 +1,183 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+    --vino: #6b1e2a;
+    --vino-oscuro: #4a141d;
+    --crema: #f6f1e7;
+    --carbon: #2a2420;
+    --oro: #b8893f;
+    --salvia: #6f7c5e;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: 'Work Sans', sans-serif;
+    color: var(--carbon);
+    background-color: var(--crema);
 }
 
-header {
-    background-color: #222;
-    color: white;
-    padding: 20px;
-    text-align: center;
+h1, h2, h3, .navbar-brand {
+    font-family: 'Fraunces', serif;
 }
 
-nav {
-    margin-top: 15px;
+/* NAVBAR */
+.navbar {
+    background-color: var(--vino-oscuro);
+    padding-top: 14px;
+    padding-bottom: 14px;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--crema);
 }
 
-main {
-    width: 90%;
-    max-width: 1000px;
-    margin: 30px auto;
+.marca-acento {
+    color: var(--oro);
 }
 
-section {
-    background-color: white;
-    padding: 30px;
-    margin-bottom: 25px;
-    border-radius: 10px;
+.nav-link {
+    color: rgba(246, 241, 231, 0.85) !important;
+    margin-left: 1.2rem;
 }
 
-h2 {
-    margin-bottom: 15px;
+.nav-link:hover {
+    color: var(--oro) !important;
 }
 
-.plato {
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 8px;
+/* HERO */
+.hero {
+    background-color: var(--vino);
+    color: var(--crema);
+    padding: 160px 0 90px;
 }
 
-.plato strong {
-    display: block;
-    margin-top: 10px;
+.eyebrow {
+    color: var(--oro);
+    font-weight: 500;
+    margin-bottom: 6px;
 }
 
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 22px;
+}
+
+.hero-texto {
+    max-width: 480px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(246, 241, 231, 0.85);
+    margin-bottom: 30px;
+}
+
+.btn-cta {
+    background-color: var(--oro);
+    color: var(--carbon);
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 3px;
     border: none;
-    background-color: #222;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
+.btn-cta:hover {
+    background-color: #a67734;
+    color: var(--carbon);
+}
+
+.hero-plato svg {
+    width: 100%;
+    max-width: 260px;
+    margin-left: auto;
+    display: block;
+}
+
+.plato-borde { fill: none; stroke: var(--oro); stroke-width: 2; opacity: 0.6; }
+.plato-interior { fill: none; stroke: var(--crema); stroke-width: 1.5; opacity: 0.4; }
+.plato-centro { fill: var(--oro); opacity: 0.15; }
+
+/* MENÚ */
+.seccion-menu {
+    padding: 90px 0;
+}
+
+.titulo-seccion {
+    font-size: 2.2rem;
+    margin-bottom: 50px;
+}
+
+.lista-menu {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.plato-item {
+    border-bottom: 1px solid rgba(42, 36, 32, 0.15);
+    padding: 26px 0;
+}
+
+.plato-item:last-child {
+    border-bottom: none;
+}
+
+.plato-item h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.plato-item p {
+    color: #5a5148;
+    margin-bottom: 0;
+}
+
+.precio {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    color: var(--vino);
+    font-weight: 600;
+}
+
+/* CONTACTO */
+.seccion-contacto {
+    background-color: var(--carbon);
+    color: var(--crema);
+    padding: 80px 0;
+}
+
+.seccion-contacto .eyebrow {
+    color: var(--oro);
+}
+
+.dato-contacto {
+    margin-bottom: 20px;
+    color: rgba(246, 241, 231, 0.75);
+}
+
+.dato-contacto strong {
+    color: var(--crema);
+    font-size: 1.1rem;
+}
+
+/* FOOTER */
 footer {
-    background-color: #222;
-    color: white;
+    background-color: var(--vino-oscuro);
+    color: rgba(246, 241, 231, 0.7);
     text-align: center;
     padding: 20px;
+    font-size: 0.9rem;
+}
+
+/* SCROLL SUAVE Y ESPACIO PARA EL NAVBAR FIJO */
+#inicio, #menu, #contacto {
+    scroll-margin-top: 80px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+    .hero { padding: 140px 0 70px; }
+    .hero h1 { font-size: 2.2rem; }
 }
