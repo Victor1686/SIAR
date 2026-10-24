@@ -1,0 +1,28 @@
+{
+  "name": "restaurante_ing_software_-",
+  "version": "1.0.0",
+  "description": "Aplicación de software desarrollada bajo una sólida arquitectura en capas, diseñada para digitalizar, optimizar y automatizar la operación integral de establecimientos gastronómicos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Victor1686/SIAR.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Victor1686/SIAR/issues"
+  },
+  "homepage": "https://github.com/Victor1686/SIAR#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.6"
+  }
+}
