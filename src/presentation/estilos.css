@@ -1,136 +1,165 @@
+/* =====================================================================
+   ARCHIVO: estilos.css
+   PARA QUÉ SIRVE: define los colores, tamaños y el diseño de index.html.
+   Se conecta con la línea <link rel="stylesheet" href="estilos.css"> del HTML.
+   ===================================================================== */
+
+/* ---------- COLORES DEL PROYECTO ----------
+   Aquí se definen una sola vez; luego se usan con var(--nombre).
+   Para cambiar un color en toda la página, se cambia aquí. */
 :root {
-    --vino: #6b1e2a;
-    --vino-oscuro: #4a141d;
-    --crema: #f6f1e7;
-    --carbon: #2a2420;
-    --oro: #b8893f;
-    --salvia: #6f7c5e;
+    --vino: #6b1e2a;          /* rojo vino: fondo de la sección inicio */
+    --vino-oscuro: #4a141d;   /* vino oscuro: barra superior y pie de página */
+    --crema: #f6f1e7;         /* crema: fondo general y textos claros */
+    --carbon: #2a2420;        /* casi negro: textos y sección contacto */
+    --oro: #b8893f;           /* dorado: botón y detalles */
+    --salvia: #6f7c5e;        /* verde suave (definido, aún sin usar) */
 }
 
+/* ---------- ESTILO GENERAL DE LA PÁGINA ---------- */
 body {
-    font-family: 'Work Sans', sans-serif;
-    color: var(--carbon);
-    background-color: var(--crema);
+    font-family: 'Work Sans', sans-serif;   /* letra del texto normal */
+    color: var(--carbon);                   /* color del texto */
+    background-color: var(--crema);         /* color de fondo */
 }
 
+/* Letra elegante (Fraunces) para títulos y para el nombre del restaurante */
 h1, h2, h3, .navbar-brand {
     font-family: 'Fraunces', serif;
 }
 
-/* NAVBAR */
+/* ---------- BARRA DE NAVEGACIÓN (arriba) ---------- */
 .navbar {
-    background-color: var(--vino-oscuro);
-    padding-top: 14px;
-    padding-bottom: 14px;
+    background-color: var(--vino-oscuro);   /* color de fondo de la barra */
+    padding-top: 14px;                      /* espacio arriba */
+    padding-bottom: 14px;                   /* espacio abajo */
 }
 
+/* Nombre del restaurante en la barra */
 .navbar-brand {
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 600;                       /* letra más gruesa */
     color: var(--crema);
 }
 
+/* Parte destacada del nombre ("Los más caleños") en dorado */
 .marca-acento {
     color: var(--oro);
 }
 
+/* Links de la barra: Inicio, Menú, Contacto */
 .nav-link {
-    color: rgba(246, 241, 231, 0.85) !important;
-    margin-left: 1.2rem;
+    color: rgba(246, 241, 231, 0.85) !important;   /* crema un poco transparente */
+    margin-left: 1.2rem;                            /* separación entre links */
 }
 
+/* Cuando el mouse pasa por encima de un link, se pone dorado */
 .nav-link:hover {
     color: var(--oro) !important;
 }
 
-/* HERO */
+/* ---------- SECCIÓN INICIO (zona grande vino) ---------- */
 .hero {
     background-color: var(--vino);
     color: var(--crema);
-    padding: 160px 0 90px;
+    padding: 160px 0 90px;     /* espacio: arriba, lados, abajo */
 }
 
+/* Texto pequeño dorado que va encima de los títulos */
 .eyebrow {
     color: var(--oro);
     font-weight: 500;
     margin-bottom: 6px;
 }
 
+/* Título grande "Buena mesa, buena compañía." */
 .hero h1 {
     font-size: 3rem;
     font-weight: 600;
-    line-height: 1.15;
+    line-height: 1.15;         /* separación entre las dos líneas */
     margin-bottom: 22px;
 }
 
+/* Párrafo de bienvenida */
 .hero-texto {
-    max-width: 480px;
+    max-width: 480px;                       /* ancho máximo para que no quede muy largo */
     font-size: 1.05rem;
     line-height: 1.6;
     color: rgba(246, 241, 231, 0.85);
     margin-bottom: 30px;
 }
 
+/* ---------- BOTÓN "Hacer pedido" ---------- */
 .btn-cta {
     background-color: var(--oro);
     color: var(--carbon);
     font-weight: 600;
     padding: 12px 30px;
-    border-radius: 3px;
+    border-radius: 3px;        /* esquinas casi rectas */
     border: none;
 }
 
+/* Cuando el mouse pasa por encima del botón, el dorado se oscurece */
 .btn-cta:hover {
     background-color: #a67734;
     color: var(--carbon);
 }
 
+/* ---------- DIBUJO DEL PLATO (círculos decorativos) ---------- */
 .hero-plato svg {
     width: 100%;
     max-width: 260px;
-    margin-left: auto;
+    margin-left: auto;         /* lo empuja hacia la derecha */
     display: block;
 }
 
-.plato-borde { fill: none; stroke: var(--oro); stroke-width: 2; opacity: 0.6; }
-.plato-interior { fill: none; stroke: var(--crema); stroke-width: 1.5; opacity: 0.4; }
-.plato-centro { fill: var(--oro); opacity: 0.15; }
+/* Los tres círculos del dibujo */
+.plato-borde { fill: none; stroke: var(--oro); stroke-width: 2; opacity: 0.6; }       /* círculo exterior dorado */
+.plato-interior { fill: none; stroke: var(--crema); stroke-width: 1.5; opacity: 0.4; } /* círculo del medio */
+.plato-centro { fill: var(--oro); opacity: 0.15; }                                      /* círculo central relleno */
 
-/* MENÚ */
+/* ---------- SECCIÓN MENÚ ---------- */
 .seccion-menu {
-    padding: 90px 0;
+    padding: 90px 0;           /* espacio arriba y abajo de la sección */
 }
 
+/* Título de cada sección ("Nuestro menú", "Contacto") */
 .titulo-seccion {
     font-size: 2.2rem;
     margin-bottom: 50px;
 }
 
+/* Contenedor de la lista de platos (angosto y centrado) */
 .lista-menu {
     max-width: 720px;
-    margin: 0 auto;
+    margin: 0 auto;            /* lo centra */
 }
 
+/* Cada plato: una línea fina debajo para separarlo del siguiente */
 .plato-item {
     border-bottom: 1px solid rgba(42, 36, 32, 0.15);
     padding: 26px 0;
 }
 
+/* El último plato no lleva línea debajo */
 .plato-item:last-child {
     border-bottom: none;
 }
 
+/* Nombre del plato */
 .plato-item h3 {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 6px;
 }
 
+/* Descripción del plato */
 .plato-item p {
     color: #5a5148;
     margin-bottom: 0;
 }
 
+/* Precio del plato (en color vino) */
 .precio {
     font-family: 'Fraunces', serif;
     font-size: 1.2rem;
@@ -138,28 +167,31 @@ h1, h2, h3, .navbar-brand {
     font-weight: 600;
 }
 
-/* CONTACTO */
+/* ---------- SECCIÓN CONTACTO (zona oscura) ---------- */
 .seccion-contacto {
     background-color: var(--carbon);
     color: var(--crema);
     padding: 80px 0;
 }
 
+/* Texto pequeño dorado dentro de contacto */
 .seccion-contacto .eyebrow {
     color: var(--oro);
 }
 
+/* Cada dato de contacto (teléfono, dirección) */
 .dato-contacto {
     margin-bottom: 20px;
     color: rgba(246, 241, 231, 0.75);
 }
 
+/* El dato en sí (el número y la dirección) se resalta */
 .dato-contacto strong {
     color: var(--crema);
     font-size: 1.1rem;
 }
 
-/* FOOTER */
+/* ---------- PIE DE PÁGINA ---------- */
 footer {
     background-color: var(--vino-oscuro);
     color: rgba(246, 241, 231, 0.7);
@@ -168,16 +200,20 @@ footer {
     font-size: 0.9rem;
 }
 
-/* SCROLL SUAVE Y ESPACIO PARA EL NAVBAR FIJO */
+/* ---------- SALTO SUAVE ENTRE SECCIONES ---------- */
+/* Deja 80px de espacio arriba al llegar a una sección, para que la barra fija no la tape */
 #inicio, #menu, #contacto {
     scroll-margin-top: 80px;
 }
 
+/* Hace que al hacer clic en un link la página se deslice suavemente */
 html {
     scroll-behavior: smooth;
 }
 
+/* ---------- AJUSTES PARA CELULAR ---------- */
+/* Estas reglas solo se aplican en pantallas angostas (768px o menos) */
 @media (max-width: 768px) {
-    .hero { padding: 140px 0 70px; }
-    .hero h1 { font-size: 2.2rem; }
+    .hero { padding: 140px 0 70px; }     /* menos espacio en el inicio */
+    .hero h1 { font-size: 2.2rem; }      /* título más pequeño */
 }

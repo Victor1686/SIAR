@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar menú</title>
+    <!-- Carga Bootstrap (los estilos listos para usar: botones, tabla, columnas) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ============ BARRA SUPERIOR ============ -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand">Administrar menú</span>
+        <!-- BOTÓN "Ver menú": lleva a la página menu.html -->
+        <a class="btn btn-outline-light btn-sm" href="menu.html">Ver menú</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- ============ MENSAJE DE AVISO ============ -->
+    <!-- Aquí aparecen los mensajes verdes (éxito) o rojos (error). Empieza oculto. -->
+    <div id="alerta" class="alert d-none" role="alert"></div>
+
+    <div class="row g-4">
+
+        <!-- ============ COLUMNA IZQUIERDA: CATEGORÍAS ============ -->
+        <div class="col-lg-4">
+            <h2 class="h5">Categorías</h2>
+            <div class="input-group mb-2">
+                <!-- Campo oculto: guarda el id de la categoría que se está editando -->
+                <input type="hidden" id="cId">
+                <!-- CAMPO DE TEXTO: nombre de la categoría -->
+                <input type="text" id="cNombre" class="form-control" placeholder="Nombre de la categoría">
+                <!-- BOTÓN "Guardar" categoría: ejecuta la función guardarCategoria() -->
+                <button class="btn btn-primary" onclick="guardarCategoria()">Guardar</button>
+            </div>
+            <!-- LISTA de categorías (se llena sola desde el JavaScript de abajo) -->
+            <ul id="listaCategorias" class="list-group"></ul>
+        </div>
+
+        <!-- ============ COLUMNA DERECHA: PRODUCTOS ============ -->
+        <div class="col-lg-8">
+            <h2 class="h5">Producto</h2>
+
+            <!-- FORMULARIO para crear o editar un producto -->
+            <div class="row g-2 mb-3">
+                <!-- Campo oculto: guarda el id del producto que se está editando -->
+                <input type="hidden" id="pId">
+                <!-- Nombre (obligatorio) -->
+                <div class="col-md-6"><input type="text" id="pNombre" class="form-control" placeholder="Nombre *"></div>
+                <!-- Precio (obligatorio, debe ser positivo) -->
+                <div class="col-md-3"><input type="number" id="pPrecio" class="form-control" placeholder="Precio *" min="1"></div>
+                <!-- Lista desplegable de categorías (obligatoria, se llena sola) -->
+                <div class="col-md-3"><select id="pCategoria" class="form-select"></select></div>
+                <!-- Descripción (opcional) -->
+                <div class="col-md-6"><input type="text" id="pDescripcion" class="form-control" placeholder="Descripción / ingredientes (opcional)"></div>
+                <!-- Imagen (opcional): se pega la dirección web de la foto -->
+                <div class="col-md-6"><input type="text" id="pImagen" class="form-control" placeholder="URL de imagen (opcional)"></div>
+                <div class="col-12">
+                    <!-- BOTÓN "Guardar producto": ejecuta guardarProducto() -->
+                    <button class="btn btn-primary" onclick="guardarProducto()">Guardar producto</button>
+                    <!-- BOTÓN "Cancelar": limpia el formulario con limpiarProducto() -->
+                    <button class="btn btn-outline-secondary" onclick="limpiarProducto()">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- TABLA de productos (las filas se llenan solas desde el JavaScript de abajo) -->
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Disponible</th><th></th></tr></thead>
+                    <tbody id="tablaProductos"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Carga el archivo de datos (debe estar en la misma carpeta) -->
+<script src="menu-data.js"></script>
+
+<script>
+// =====================================================================
+// FUNCIONES AUXILIARES
+// =====================================================================
+
+// Atajo: $("miId") es lo mismo que document.getElementById("miId")
+const $ = id => document.getElementById(id);
+
+// Protege la página: convierte caracteres especiales (<, >, &) en texto seguro
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Da formato de dinero: 25000 se muestra como $25.000
+const dinero = n => "$" + Number(n).toLocaleString("es-CO");
+
+// Muestra el mensaje verde (éxito) o rojo (error) arriba, y lo oculta a los 3 segundos
+function aviso(texto, bien = true) {
+    const a = $("alerta");
+    a.className = "alert alert-" + (bien ? "success" : "danger");
+    a.textContent = texto;
+    setTimeout(() => a.classList.add("d-none"), 3000);
+}
+
+// Revisa el resultado de una acción: muestra el aviso y, si salió bien, vuelve a dibujar todo
+function resultado(r, textoOk) { r.ok ? aviso(textoOk) : aviso(r.error, false); if (r.ok) render(); return r.ok; }
+
+// =====================================================================
+// DIBUJAR LA PANTALLA
+// Se ejecuta al abrir la página y después de cada cambio.
+// Llena la lista de categorías, el desplegable y la tabla de productos.
+// =====================================================================
+function render() {
+    const cats = MenuData.categorias();
+
+    // Dibuja la lista de categorías, cada una con sus botones Editar y Eliminar
+    $("listaCategorias").innerHTML = cats.map(c => `
+        <li class="list-group-item d-flex justify-content-between align-items-center">${esc(c.nombre)}
+            <span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="editarCategoria(${c.id})">Editar</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="borrarCategoria(${c.id})">Eliminar</button>
+            </span>
+        </li>`).join("");
+
+    // Llena el desplegable de categorías del formulario de producto
+    const actual = $("pCategoria").value;   // recuerda la opción elegida para no perderla
+    $("pCategoria").innerHTML = '<option value="">Categoría *</option>' +
+        cats.map(c => `<option value="${c.id}">${esc(c.nombre)}</option>`).join("");
+    $("pCategoria").value = actual;
+
+    // Dibuja la tabla de productos: una fila por producto, con el interruptor de
+    // disponibilidad y los botones Editar y Eliminar
+    $("tablaProductos").innerHTML = MenuData.productos().map(p => {
+        const cat = cats.find(c => c.id === p.categoriaId);
+        return `<tr>
+            <td>${esc(p.nombre)}</td>
+            <td>${cat ? esc(cat.nombre) : "-"}</td>
+            <td>${dinero(p.precio)}</td>
+            <td><div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" ${p.disponible ? "checked" : ""} onchange="alternar(${p.id})">
+            </div></td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="editarProducto(${p.id})">Editar</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="darDeBaja(${p.id})">Eliminar</button>
+            </td></tr>`;
+    }).join("");
+}
+
+// =====================================================================
+// CATEGORÍAS
+// =====================================================================
+
+// BOTÓN "Guardar" categoría: crea una nueva o guarda la que se está editando
+function guardarCategoria() {
+    const id = Number($("cId").value) || undefined;   // si hay id, es edición; si no, es nueva
+    if (resultado(MenuData.guardarCategoria({ id, nombre: $("cNombre").value }), "Categoría guardada.")) {
+        $("cId").value = ""; $("cNombre").value = "";  // limpia el campo después de guardar
+    }
+}
+
+// BOTÓN "Editar" de una categoría: pasa su nombre al campo de texto para modificarlo
+function editarCategoria(id) {
+    const c = MenuData.categorias().find(x => x.id === id);
+    $("cId").value = c.id; $("cNombre").value = c.nombre;
+}
+
+// BOTÓN "Eliminar" de una categoría: pide confirmación y la elimina
+function borrarCategoria(id) {
+    if (confirm("¿Eliminar esta categoría?")) resultado(MenuData.eliminarCategoria(id), "Categoría eliminada.");
+}
+
+// =====================================================================
+// PRODUCTOS
+// =====================================================================
+
+// BOTÓN "Guardar producto": toma los datos del formulario y crea o edita el producto
+function guardarProducto() {
+    const p = {
+        id: Number($("pId").value) || undefined,   // si hay id, es edición; si no, es nuevo
+        nombre: $("pNombre").value, precio: $("pPrecio").value,
+        categoriaId: Number($("pCategoria").value), descripcion: $("pDescripcion").value, imagen: $("pImagen").value
+    };
+    if (resultado(MenuData.guardarProducto(p), "Producto guardado.")) limpiarProducto();
+}
+
+// BOTÓN "Editar" de un producto: pasa sus datos al formulario para modificarlos
+function editarProducto(id) {
+    const p = MenuData.productos().find(x => x.id === id);
+    $("pId").value = p.id; $("pNombre").value = p.nombre; $("pPrecio").value = p.precio;
+    $("pCategoria").value = p.categoriaId; $("pDescripcion").value = p.descripcion; $("pImagen").value = p.imagen;
+}
+
+// BOTÓN "Cancelar": vacía todos los campos del formulario de producto
+function limpiarProducto() { ["pId", "pNombre", "pPrecio", "pCategoria", "pDescripcion", "pImagen"].forEach(i => $(i).value = ""); }
+
+// BOTÓN "Eliminar" de un producto: pide confirmación y lo da de baja (no se borra de verdad)
+function darDeBaja(id) {
+    if (confirm("¿Dar de baja este producto? Dejará de aparecer en el menú.")) resultado(MenuData.bajaProducto(id), "Producto dado de baja.");
+}
+
+// INTERRUPTOR "Disponible": cambia el producto entre Disponible y Agotado
+function alternar(id) { resultado(MenuData.alternarDisponible(id), "Disponibilidad actualizada."); }
+
+// Al abrir la página, dibuja todo por primera vez
+render();
+</script>
+</body>
+</html>

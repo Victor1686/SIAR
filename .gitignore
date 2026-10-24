@@ -1,5 +1,7 @@
 node_modules/
-dist/
 .env
-*.log
-.Ds_Store
+.env.*
+!.env.example
+coverage/
+estructura.txt
+src/presentation.zip

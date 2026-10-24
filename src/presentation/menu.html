@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú</title>
+    <!-- Carga Bootstrap (los estilos listos para usar) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ============ BARRA SUPERIOR ============ -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand">Menú</span>
+        <!-- BOTÓN "Administrar": lleva a la página admin-menu.html -->
+        <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar</a>
+    </div>
+</nav>
+
+<!-- ============ ZONA DEL MENÚ ============ -->
+<!-- Aquí se dibujan las categorías y productos desde el JavaScript de abajo -->
+<div class="container" id="menu"></div>
+
+<!-- Carga el archivo de datos (debe estar en la misma carpeta) -->
+<script src="menu-data.js"></script>
+
+<script>
+// Protege la página: convierte caracteres especiales en texto seguro
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Da formato de dinero: 25000 se muestra como $25.000
+const dinero = n => "$" + Number(n).toLocaleString("es-CO");
+
+// Pide los productos activos (los dados de baja no se muestran)
+const productos = MenuData.productos();
+
+// Arma el menú: por cada categoría, escribe su título y la lista de sus productos
+const html = MenuData.categorias().map(c => {
+    const items = productos.filter(p => p.categoriaId === c.id);
+    if (!items.length) return "";   // si la categoría no tiene productos, no se muestra
+
+    // Cada producto muestra nombre, descripción y precio.
+    // Si está agotado, se ve en gris y con la etiqueta "Agotado".
+    return `<h2 class="h4 mt-4">${esc(c.nombre)}</h2><ul class="list-group">` + items.map(p => `
+        <li class="list-group-item d-flex justify-content-between ${p.disponible ? "" : "text-muted"}">
+            <div>
+                <strong>${esc(p.nombre)}</strong>
+                ${p.disponible ? "" : '<span class="badge bg-secondary ms-2">Agotado</span>'}
+                <div class="small">${esc(p.descripcion)}</div>
+            </div>
+            <span>${dinero(p.precio)}</span>
+        </li>`).join("") + "</ul>";
+}).join("");
+
+// Muestra el menú en la página (o un mensaje si no hay productos)
+document.getElementById("menu").innerHTML = html || "<p>No hay productos en el menú.</p>";
+</script>
+</body>
+</html>
