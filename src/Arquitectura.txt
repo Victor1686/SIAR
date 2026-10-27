@@ -1,25 +1,53 @@
-Descripción y contenido de cada carpeta
+# SIAR - Arquitectura del Sistema
 
-presentation/ (Capa de Presentación)
-Qué debe ir: Todo lo que interactúa directamente con el cliente o usuario externo (ya sea una API REST, controladores 
-web, vistas, componentes de interfaz o manejo de rutas y DTOs de entrada/salida).
+## 1. Arquitectura general
 
-Ejemplos: Controladores (Controllers), rutas (Routes), esquemas de validación de peticiones, adaptadores de 
-presentación y manejo de formatos de respuesta HTTP.
+SIAR (Sistema Integral de Administración para Restaurantes) se organiza mediante una arquitectura en capas. Su objetivo es separar la interfaz de usuario, la lógica de negocio, el acceso a datos y la configuración técnica para facilitar el mantenimiento y la evolución del sistema.
 
-business/ o domain/ / service/ (Capa de Lógica de Negocio)
-Qué debe ir: El núcleo funcional de la aplicación. Aquí residen las reglas de negocio, los cálculos, las validaciones 
-complejas de procesos y los casos de uso. Esta capa no debe saber de bases de datos específicas ni de frameworks web; 
-solo procesa la información que le pasa la presentación.
+## 2. Capa de presentación: `src/presentation/`
 
-Ejemplos: Clases de servicio (Services), manejadores de transacciones de negocio, lógica de validación de reglas de dominio y transformadores de objetos de negocio.
+Esta capa contiene los archivos que permiten al usuario interactuar con el sistema mediante la interfaz web.
 
-data/ o persistence/ / repository/ (Capa de Acceso a Datos)
-Qué debe ir: Los componentes encargados de comunicarse con fuentes externas de almacenamiento. Aquí se implementan las 
-consultas, la persistencia, el mapeo de objetos relacionales (ORM) o la conexión directa mediante drivers.
+Contenido actual:
+- `index.html`: página principal.
+- `menu.html`: interfaz del menú.
+- `admin-menu.html`: interfaz de administración del menú.
+- `estilos.css`: estilos visuales.
+- `script.js`: comportamiento de la interfaz.
+- `menu-data.js`: manejo de los datos del menú en la interfaz.
 
-Ejemplos: Repositorios (Repositories), DAOs (Data Access Objects), consultas SQL o JPA, modelos de entidades de base de datos y la configuración de conexión (como pools de conexiones).
+## 3. Capa de lógica de negocio: `src/business/`
 
-config/ (Capas transversales / Infraestructura base)
-Qué debe ir: Clases de configuración global que sostienen el funcionamiento técnico de la aplicación, tales como 
-seguridad, inyección de dependencias global, variables de entorno o adaptadores de logging.
+Esta capa estará destinada a implementar las reglas de negocio y los procesos funcionales de SIAR.
+
+Su responsabilidad será validar las operaciones del sistema y coordinar los procesos entre la presentación y el acceso a datos.
+
+La implementación de esta capa debe verificarse en el código antes de considerarla terminada.
+
+## 4. Capa de acceso a datos: `src/data/`
+
+Esta capa se encarga de la comunicación con la base de datos y de las operaciones necesarias para consultar o guardar información.
+
+Archivo identificado:
+- `conexion.js`: contiene la configuración o lógica de conexión a la base de datos, cuyo funcionamiento debe comprobarse.
+
+El archivo SQL de la base de datos se encuentra en `database/siar_db.sql`.
+
+## 5. Configuración e infraestructura: `src/config/`
+
+Esta carpeta reúne archivos relacionados con la configuración técnica del sistema.
+
+Archivos identificados:
+- `env.js`: relacionado con la configuración de variables de entorno.
+- `script.js`: su responsabilidad debe confirmarse revisando su contenido.
+
+## 6. Organización del proyecto
+
+La estructura del repositorio separa la interfaz web, la conexión a datos, la configuración y los archivos de base de datos. La lógica de negocio y los demás componentes del backend deben implementarse o verificarse de acuerdo con el estado real del código.
+
+## 7. Mantenimiento
+
+La documentación debe mantenerse actualizada conforme avance el desarrollo. Antes de registrar una funcionalidad como terminada, se debe comprobar su implementación y funcionamiento.
+
+**Proyecto:** SIAR - Sistema Integral de Administración para Restaurantes  
+**Equipo de desarrollo actual:** Victor Manuel Izquierdo y Alexander
