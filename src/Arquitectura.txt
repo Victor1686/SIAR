@@ -50,4 +50,3 @@ La estructura del repositorio separa la interfaz web, la conexión a datos, la c
 La documentación debe mantenerse actualizada conforme avance el desarrollo. Antes de registrar una funcionalidad como terminada, se debe comprobar su implementación y funcionamiento.
 
 **Proyecto:** SIAR - Sistema Integral de Administración para Restaurantes  
-**Equipo de desarrollo actual:** Victor Manuel Izquierdo y Alexander

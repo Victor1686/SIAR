@@ -51,5 +51,3 @@ Proyecto desarrollado por el equipo actual de SIAR, integrado por Victor Manuel 
 El sistema se encuentra en desarrollo. Las funcionalidades deben validarse a medida que se implementan y se integran sus componentes.
 
 ## Repositorio
-
-El código fuente se gestiona mediante Git y GitHub.
