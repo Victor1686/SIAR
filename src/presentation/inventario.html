@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | SIAR</title>
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        .inventario-contenedor {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 24px;
+            color: #302622;
+        }
+
+        .inventario-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .inventario-cabecera h1 {
+            margin: 0 0 8px;
+        }
+
+        .inventario-cabecera p {
+            margin: 0;
+            color: #756b64;
+        }
+
+        .inventario-boton {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 15px;
+            background: #762d35;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .inventario-boton:hover {
+            background: #572027;
+        }
+
+        .inventario-resumen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .inventario-tarjeta {
+            background: white;
+            border: 1px solid #e8e0d8;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .inventario-tarjeta span {
+            display: block;
+            color: #756b64;
+            margin-bottom: 10px;
+        }
+
+        .inventario-tarjeta strong {
+            color: #762d35;
+            font-size: 28px;
+        }
+
+        .inventario-panel {
+            background: white;
+            border: 1px solid #e8e0d8;
+            border-radius: 12px;
+            padding: 22px;
+            overflow-x: auto;
+        }
+
+        .inventario-panel h2 {
+            margin-top: 0;
+        }
+
+        .inventario-tabla {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        .inventario-tabla th,
+        .inventario-tabla td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee7e1;
+        }
+
+        .inventario-tabla th {
+            color: #762d35;
+            background: #faf5f0;
+        }
+
+        .inventario-estado {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .stock-normal {
+            background: #dff5e5;
+            color: #206b36;
+        }
+
+        .stock-bajo {
+            background: #fff0d4;
+            color: #875600;
+        }
+
+        .inventario-acciones {
+            display: flex;
+            gap: 6px;
+        }
+
+        .inventario-acciones button {
+            padding: 7px 10px;
+            border: 1px solid #762d35;
+            border-radius: 6px;
+            color: #762d35;
+            background: white;
+            cursor: pointer;
+        }
+
+        .inventario-acciones button:hover {
+            background: #faf0ed;
+        }
+
+        .inventario-vacio {
+            padding: 24px;
+            text-align: center !important;
+            color: #756b64;
+        }
+
+        @media (max-width: 600px) {
+            .inventario-contenedor {
+                padding: 12px;
+            }
+
+            .inventario-panel {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="inventario-contenedor">
+        <header class="inventario-cabecera">
+            <div>
+                <h1>Gestión de inventario</h1>
+                <p>Control de insumos y existencias del restaurante.</p>
+            </div>
+
+            <button class="inventario-boton" onclick="registrarInsumo()">
+                + Nuevo insumo
+            </button>
+        </header>
+
+        <section class="inventario-resumen">
+            <article class="inventario-tarjeta">
+                <span>Insumos registrados</span>
+                <strong id="cantidadInsumos">0</strong>
+            </article>
+
+            <article class="inventario-tarjeta">
+                <span>Stock normal</span>
+                <strong id="cantidadNormal">0</strong>
+            </article>
+
+            <article class="inventario-tarjeta">
+                <span>Stock bajo</span>
+                <strong id="cantidadBaja">0</strong>
+            </article>
+        </section>
+
+        <section class="inventario-panel">
+            <h2>Existencias de insumos</h2>
+
+            <table class="inventario-tabla">
+                <thead>
+                    <tr>
+                        <th>Insumo</th>
+                        <th>Categoría</th>
+                        <th>Existencias</th>
+                        <th>Stock mínimo</th>
+                        <th>Estado</th>
+                        <th>Movimientos</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaInsumos"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        let insumos = [
+            { id: 1, nombre: "Carne de res", categoria: "Proteínas", cantidad: 12, minimo: 5, unidad: "kg" },
+            { id: 2, nombre: "Queso mozzarella", categoria: "Lácteos", cantidad: 2, minimo: 4, unidad: "kg" },
+            { id: 3, nombre: "Tomate", categoria: "Verduras", cantidad: 8, minimo: 3, unidad: "kg" },
+            { id: 4, nombre: "Harina", categoria: "Despensa", cantidad: 15, minimo: 5, unidad: "kg" },
+            { id: 5, nombre: "Aceite", categoria: "Despensa", cantidad: 1, minimo: 3, unidad: "L" }
+        ];
+function eliminarInsumo(id) {
+    const insumo = insumos.find(i => i.id === id);
+
+    if (!insumo) return;
+
+    const confirmar = confirm(
+        `¿Seguro que deseas eliminar el insumo "${insumo.nombre}"?`
+    );
+
+    if (!confirmar) return;
+
+    insumos = insumos.filter(i => i.id !== id);
+
+    actualizarInventario();
+
+    alert("Insumo eliminado correctamente.");
+}
+        function actualizarInventario() {
+            const lista = document.getElementById("listaInsumos");
+
+            document.getElementById("cantidadInsumos").textContent =
+                insumos.length;
+
+            document.getElementById("cantidadNormal").textContent =
+                insumos.filter(i => i.cantidad >= i.minimo).length;
+
+            document.getElementById("cantidadBaja").textContent =
+                insumos.filter(i => i.cantidad < i.minimo).length;
+
+            if (insumos.length === 0) {
+                lista.innerHTML =
+                    '<tr><td colspan="6" class="inventario-vacio">No hay insumos registrados.</td></tr>';
+                return;
+            }
+
+            lista.innerHTML = insumos.map(i => {
+                const bajo = i.cantidad < i.minimo;
+
+                return `
+                    <tr>
+                        <td>${i.nombre}</td>
+                        <td>${i.categoria}</td>
+                        <td>${i.cantidad} ${i.unidad}</td>
+                        <td>${i.minimo} ${i.unidad}</td>
+                        <td>
+                            <span class="inventario-estado ${bajo ? "stock-bajo" : "stock-normal"}">
+                                ${bajo ? "Stock bajo" : "Normal"}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="inventario-acciones">
+                                <button onclick="moverStock(${i.id}, 'entrada')">+ Entrada</button>
+                                <button onclick="moverStock(${i.id}, 'salida')">− Salida</button>
+                             <button onclick="eliminarInsumo(${i.id})">Eliminar</button>
+                                </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function moverStock(id, tipo) {
+            const insumo = insumos.find(i => i.id === id);
+            if (!insumo) return;
+
+            const cantidad = Number(prompt(
+                `¿Cuántas unidades de ${insumo.nombre} deseas registrar?`
+            ));
+
+            if (!Number.isFinite(cantidad) || cantidad <= 0) {
+                alert("Ingresa una cantidad mayor que cero.");
+                return;
+            }
+
+            if (tipo === "salida" && cantidad > insumo.cantidad) {
+                alert("No hay existencias suficientes para esa salida.");
+                return;
+            }
+
+            if (tipo === "entrada") {
+                insumo.cantidad += cantidad;
+            } else {
+                insumo.cantidad -= cantidad;
+            }
+
+            actualizarInventario();
+        }
+
+        function registrarInsumo() {
+            const nombre = prompt("Nombre del nuevo insumo:");
+            if (!nombre || !nombre.trim()) return;
+
+            const categoria = prompt("Categoría del insumo:");
+            if (!categoria || !categoria.trim()) return;
+
+            const unidad = prompt("Unidad de medida (kg, L, unidades, etc.):");
+            if (!unidad || !unidad.trim()) return;
+
+            const cantidad = Number(prompt("Cantidad inicial disponible:"));
+            if (!Number.isFinite(cantidad) || cantidad < 0) {
+                alert("Ingresa una cantidad inicial válida.");
+                return;
+            }
+
+            const minimo = Number(prompt("Stock mínimo permitido:"));
+            if (!Number.isFinite(minimo) || minimo < 0) {
+                alert("Ingresa un stock mínimo válido.");
+                return;
+            }
+
+            insumos.push({
+                id: insumos.length
+                    ? Math.max(...insumos.map(i => i.id)) + 1
+                    : 1,
+                nombre: nombre.trim(),
+                categoria: categoria.trim(),
+                cantidad,
+                minimo,
+                unidad: unidad.trim()
+            });
+
+            actualizarInventario();
+        }
+
+        actualizarInventario();
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | SIAR</title>
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        .inventario-contenedor {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 24px;
+            color: #302622;
+        }
+
+        .inventario-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .inventario-cabecera h1 {
+            margin: 0 0 8px;
+        }
+
+        .inventario-cabecera p {
+            margin: 0;
+            color: #756b64;
+        }
+
+        .inventario-boton {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 15px;
+            background: #762d35;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .inventario-boton:hover {
+            background: #572027;
+        }
+
+        .inventario-resumen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .inventario-tarjeta {
+            background: white;
+            border: 1px solid #e8e0d8;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .inventario-tarjeta span {
+            display: block;
+            color: #756b64;
+            margin-bottom: 10px;
+        }
+
+        .inventario-tarjeta strong {
+            color: #762d35;
+            font-size: 28px;
+        }
+
+        .inventario-panel {
+            background: white;
+            border: 1px solid #e8e0d8;
+            border-radius: 12px;
+            padding: 22px;
+            overflow-x: auto;
+        }
+
+        .inventario-panel h2 {
+            margin-top: 0;
+        }
+
+        .inventario-tabla {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        .inventario-tabla th,
+        .inventario-tabla td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee7e1;
+        }
+
+        .inventario-tabla th {
+            color: #762d35;
+            background: #faf5f0;
+        }
+
+        .inventario-estado {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .stock-normal {
+            background: #dff5e5;
+            color: #206b36;
+        }
+
+        .stock-bajo {
+            background: #fff0d4;
+            color: #875600;
+        }
+
+        .inventario-acciones {
+            display: flex;
+            gap: 6px;
+        }
+
+        .inventario-acciones button {
+            padding: 7px 10px;
+            border: 1px solid #762d35;
+            border-radius: 6px;
+            color: #762d35;
+            background: white;
+            cursor: pointer;
+        }
+
+        .inventario-acciones button:hover {
+            background: #faf0ed;
+        }
+
+        .inventario-vacio {
+            padding: 24px;
+            text-align: center !important;
+            color: #756b64;
+        }
+
+        @media (max-width: 600px) {
+            .inventario-contenedor {
+                padding: 12px;
+            }
+
+            .inventario-panel {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="inventario-contenedor">
+        <header class="inventario-cabecera">
+            <div>
+                <h1>Gestión de inventario</h1>
+                <p>Control de insumos y existencias del restaurante.</p>
+            </div>
+
+            <button class="inventario-boton" onclick="registrarInsumo()">
+                + Nuevo insumo
+            </button>
+        </header>
+
+        <section class="inventario-resumen">
+            <article class="inventario-tarjeta">
+                <span>Insumos registrados</span>
+                <strong id="cantidadInsumos">0</strong>
+            </article>
+
+            <article class="inventario-tarjeta">
+                <span>Stock normal</span>
+                <strong id="cantidadNormal">0</strong>
+            </article>
+
+            <article class="inventario-tarjeta">
+                <span>Stock bajo</span>
+                <strong id="cantidadBaja">0</strong>
+            </article>
+        </section>
+
+        <section class="inventario-panel">
+            <h2>Existencias de insumos</h2>
+
+            <table class="inventario-tabla">
+                <thead>
+                    <tr>
+                        <th>Insumo</th>
+                        <th>Categoría</th>
+                        <th>Existencias</th>
+                        <th>Stock mínimo</th>
+                        <th>Estado</th>
+                        <th>Movimientos</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaInsumos"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        let insumos = [
+            { id: 1, nombre: "Carne de res", categoria: "Proteínas", cantidad: 12, minimo: 5, unidad: "kg" },
+            { id: 2, nombre: "Queso mozzarella", categoria: "Lácteos", cantidad: 2, minimo: 4, unidad: "kg" },
+            { id: 3, nombre: "Tomate", categoria: "Verduras", cantidad: 8, minimo: 3, unidad: "kg" },
+            { id: 4, nombre: "Harina", categoria: "Despensa", cantidad: 15, minimo: 5, unidad: "kg" },
+            { id: 5, nombre: "Aceite", categoria: "Despensa", cantidad: 1, minimo: 3, unidad: "L" }
+        ];
+
+        function actualizarInventario() {
+            const lista = document.getElementById("listaInsumos");
+
+            document.getElementById("cantidadInsumos").textContent =
+                insumos.length;
+
+            document.getElementById("cantidadNormal").textContent =
+                insumos.filter(i => i.cantidad >= i.minimo).length;
+
+            document.getElementById("cantidadBaja").textContent =
+                insumos.filter(i => i.cantidad < i.minimo).length;
+
+            if (insumos.length === 0) {
+                lista.innerHTML =
+                    '<tr><td colspan="6" class="inventario-vacio">No hay insumos registrados.</td></tr>';
+                return;
+            }
+
+            lista.innerHTML = insumos.map(i => {
+                const bajo = i.cantidad < i.minimo;
+
+                return `
+                    <tr>
+                        <td>${i.nombre}</td>
+                        <td>${i.categoria}</td>
+                        <td>${i.cantidad} ${i.unidad}</td>
+                        <td>${i.minimo} ${i.unidad}</td>
+                        <td>
+                            <span class="inventario-estado ${bajo ? "stock-bajo" : "stock-normal"}">
+                                ${bajo ? "Stock bajo" : "Normal"}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="inventario-acciones">
+                                <button onclick="moverStock(${i.id}, 'entrada')">+ Entrada</button>
+                                <button onclick="moverStock(${i.id}, 'salida')">− Salida</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function moverStock(id, tipo) {
+            const insumo = insumos.find(i => i.id === id);
+            if (!insumo) return;
+
+            const cantidad = Number(prompt(
+                `¿Cuántas unidades de ${insumo.nombre} deseas registrar?`
+            ));
+
+            if (!Number.isFinite(cantidad) || cantidad <= 0) {
+                alert("Ingresa una cantidad mayor que cero.");
+                return;
+            }
+
+            if (tipo === "salida" && cantidad > insumo.cantidad) {
+                alert("No hay existencias suficientes para esa salida.");
+                return;
+            }
+
+            if (tipo === "entrada") {
+                insumo.cantidad += cantidad;
+            } else {
+                insumo.cantidad -= cantidad;
+            }
+
+            actualizarInventario();
+        }
+
+        function registrarInsumo() {
+            const nombre = prompt("Nombre del nuevo insumo:");
+            if (!nombre || !nombre.trim()) return;
+
+            const categoria = prompt("Categoría del insumo:");
+            if (!categoria || !categoria.trim()) return;
+
+            const unidad = prompt("Unidad de medida (kg, L, unidades, etc.):");
+            if (!unidad || !unidad.trim()) return;
+
+            const cantidad = Number(prompt("Cantidad inicial disponible:"));
+            if (!Number.isFinite(cantidad) || cantidad < 0) {
+                alert("Ingresa una cantidad inicial válida.");
+                return;
+            }
+
+            const minimo = Number(prompt("Stock mínimo permitido:"));
+            if (!Number.isFinite(minimo) || minimo < 0) {
+                alert("Ingresa un stock mínimo válido.");
+                return;
+            }
+
+            insumos.push({
+                id: insumos.length
+                    ? Math.max(...insumos.map(i => i.id)) + 1
+                    : 1,
+                nombre: nombre.trim(),
+                categoria: categoria.trim(),
+                cantidad,
+                minimo,
+                unidad: unidad.trim()
+            });
+
+            actualizarInventario();
+        }
+
+        actualizarInventario();
+    </script>
+</body>
+</html>

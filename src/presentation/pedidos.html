@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos | SIAR</title>
+    <link rel="stylesheet" href="estilos.css">
+    <style>
+        .pedidos-contenedor {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 24px;
+        }
+
+        .pedidos-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .pedidos-cabecera h1 {
+            margin: 0 0 8px;
+        }
+
+        .pedidos-cabecera p {
+            margin: 0;
+            opacity: .75;
+        }
+
+        .pedidos-resumen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .pedido-tarjeta {
+            padding: 20px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e8e0d8;
+        }
+
+        .pedido-tarjeta span {
+            display: block;
+            color: #756b64;
+            margin-bottom: 8px;
+        }
+
+        .pedido-tarjeta strong {
+            font-size: 28px;
+            color: #762d35;
+        }
+
+        .pedidos-panel {
+            padding: 22px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e8e0d8;
+            overflow-x: auto;
+        }
+
+        .pedidos-panel h2 {
+            margin-top: 0;
+        }
+
+        .pedidos-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .pedidos-tabla th,
+        .pedidos-tabla td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee7e1;
+        }
+
+        .pedidos-tabla th {
+            color: #762d35;
+            background: #faf5f0;
+        }
+
+        .pedido-estado {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .pendiente { background: #fff0d4; color: #875600; }
+        .preparando { background: #dcecff; color: #18569b; }
+        .listo { background: #dff5e5; color: #206b36; }
+
+        .pedido-accion {
+            border: 0;
+            border-radius: 7px;
+            padding: 8px 12px;
+            background: #762d35;
+            color: white;
+            cursor: pointer;
+        }
+
+        .pedido-accion:hover {
+            background: #572027;
+        }
+
+        .pedido-vacio {
+            text-align: center;
+            padding: 24px;
+            color: #756b64;
+        }
+
+        @media (max-width: 600px) {
+            .pedidos-contenedor { padding: 12px; }
+            .pedidos-panel { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="pedidos-contenedor">
+        <header class="pedidos-cabecera">
+            <div>
+                <h1>Gestión de pedidos</h1>
+                <p>Administra los pedidos y su estado de preparación.</p>
+            </div>
+            <button class="pedido-accion" onclick="mostrarFormulario()">
+                + Nuevo pedido
+            </button>
+        </header>
+
+        <section class="pedidos-resumen">
+            <article class="pedido-tarjeta">
+                <span>Total de pedidos</span>
+                <strong id="totalPedidos">3</strong>
+            </article>
+            <article class="pedido-tarjeta">
+                <span>Pendientes</span>
+                <strong id="totalPendientes">1</strong>
+            </article>
+            <article class="pedido-tarjeta">
+                <span>En preparación</span>
+                <strong id="totalPreparando">1</strong>
+            </article>
+            <article class="pedido-tarjeta">
+                <span>Listos</span>
+                <strong id="totalListos">1</strong>
+            </article>
+        </section>
+
+        <section class="pedidos-panel">
+            <h2>Pedidos registrados</h2>
+            <table class="pedidos-tabla">
+                <thead>
+                    <tr>
+                        <th>N.º</th>
+                        <th>Mesa</th>
+                        <th>Productos</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="listaPedidos"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        let pedidos = [
+            { id: 1, mesa: 2, productos: "Hamburguesa x2", total: 36000, estado: "Pendiente" },
+            { id: 2, mesa: 4, productos: "Pizza familiar x1", total: 42000, estado: "Preparando" },
+            { id: 3, mesa: 1, productos: "Limonada x2", total: 12000, estado: "Listo" }
+        ];
+
+        function formatoPesos(valor) {
+            return "$" + valor.toLocaleString("es-CO");
+        }
+
+        function actualizarPedidos() {
+            const lista = document.getElementById("listaPedidos");
+
+            document.getElementById("totalPedidos").textContent = pedidos.length;
+            document.getElementById("totalPendientes").textContent =
+                pedidos.filter(p => p.estado === "Pendiente").length;
+            document.getElementById("totalPreparando").textContent =
+                pedidos.filter(p => p.estado === "Preparando").length;
+            document.getElementById("totalListos").textContent =
+                pedidos.filter(p => p.estado === "Listo").length;
+
+            if (pedidos.length === 0) {
+                lista.innerHTML = '<tr><td colspan="6" class="pedido-vacio">No hay pedidos registrados.</td></tr>';
+                return;
+            }
+
+            lista.innerHTML = pedidos.map(p => {
+                const clase = p.estado.toLowerCase();
+                const siguiente = p.estado === "Pendiente" ? "Preparando"
+                    : p.estado === "Preparando" ? "Listo" : "Pendiente";
+
+                return `
+                    <tr>
+                        <td>#${p.id}</td>
+                        <td>${p.mesa}</td>
+                        <td>${p.productos}</td>
+                        <td>${formatoPesos(p.total)}</td>
+                        <td><span class="pedido-estado ${clase}">${p.estado}</span></td>
+                        <td><button class="pedido-accion" onclick="cambiarEstado(${p.id})">
+                            ${p.estado === "Listo" ? "Reabrir" : "Avanzar"}
+                        </button></td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function cambiarEstado(id) {
+            const pedido = pedidos.find(p => p.id === id);
+            if (!pedido) return;
+
+            if (pedido.estado === "Pendiente") pedido.estado = "Preparando";
+            else if (pedido.estado === "Preparando") pedido.estado = "Listo";
+            else pedido.estado = "Pendiente";
+
+            actualizarPedidos();
+        }
+
+        function mostrarFormulario() {
+            const mesa = prompt("¿Qué número de mesa hizo el pedido?");
+            if (mesa === null) return;
+
+            const numeroMesa = Number(mesa);
+            if (!Number.isInteger(numeroMesa) || numeroMesa < 1) {
+                alert("Ingresa un número de mesa válido.");
+                return;
+            }
+
+            const productos = prompt("¿Qué productos pidió el cliente?");
+            if (!productos || !productos.trim()) return;
+
+            const totalTexto = prompt("¿Cuál es el total del pedido en pesos colombianos?");
+            if (totalTexto === null) return;
+
+            const total = Number(totalTexto);
+            if (!Number.isFinite(total) || total <= 0) {
+                alert("Ingresa un total válido.");
+                return;
+            }
+
+            pedidos.push({
+                id: pedidos.length ? Math.max(...pedidos.map(p => p.id)) + 1 : 1,
+                mesa: numeroMesa,
+                productos: productos.trim(),
+                total: total,
+                estado: "Pendiente"
+            });
+
+            actualizarPedidos();
+        }
+
+        actualizarPedidos();
+    </script>
+</body>
+</html>

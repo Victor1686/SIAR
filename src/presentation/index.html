@@ -32,12 +32,15 @@
             </button>
 
             <!-- LINKS DEL MENÚ: cada uno salta a una sección de esta misma página -->
-            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#menu">Menú</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                </ul>
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">                
+<ul class="navbar-nav">
+    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+    <li class="nav-item"><a class="nav-link" href="menu.html">Menú</a></li>
+    <li class="nav-item"><a class="nav-link" href="pedidos.html">Pedidos</a></li>
+    <li class="nav-item"><a class="nav-link" href="inventario.html">Inventario</a></li>
+    <li class="nav-item"><a class="nav-link" href="admin-menu.html">Administrar menú</a></li>
+</ul>
+
             </div>
         </div>
     </nav>
@@ -57,7 +60,7 @@
                         como en casa, o pide para que te lo llevemos.
                     </p>
                     <!-- BOTÓN "Hacer pedido": al hacer clic ejecuta mostrarMensaje() que está en script.js -->
-                    <button class="btn btn-cta" onclick="mostrarMensaje()">Hacer pedido</button>
+                    <a href="pedidos.html" class="btn btn-cta">Hacer pedido</a>
                 </div>
 
                 <!-- Columna derecha: dibujo decorativo de un plato (solo se ve en pantallas grandes) -->
