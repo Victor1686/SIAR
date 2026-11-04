@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - SIAR</title>
+
+    <!-- Carga Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Barra de navegación -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">SIAR</a>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-light btn-sm" href="index.html">Inicio</a>
+            <a class="btn btn-outline-light btn-sm" href="menu.html">Menú</a>
+            <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar menú</a>
+            <a class="btn btn-outline-light btn-sm" href="usuarios.html">Usuarios</a>
+            <a class="btn btn-outline-light btn-sm" href="facturacion.html">Facturación</a>
+            <a class="btn btn-outline-light btn-sm" href="reportes.html">Reportes</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Reportes</h1>
+    <p>Consulta información del restaurante según el periodo seleccionado.</p>
+
+    <!-- Selección del periodo -->
+    <div class="card mb-4">
+        <div class="card-header">Filtros del reporte</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="fechaInicio" class="form-label">Fecha inicial</label>
+                    <input type="date" id="fechaInicio" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="fechaFin" class="form-label">Fecha final</label>
+                    <input type="date" id="fechaFin" class="form-control">
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary" onclick="generarReporte()">
+                        Generar reporte
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicadores de ejemplo -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h6">Ingresos</h2>
+                    <p class="fs-4">$184.500</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h6">Facturas</h2>
+                    <p class="fs-4">3</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h6">Impuestos </h2>
+                    <p class="fs-4">$27.500</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tipos de reportes -->
+    <h2 class="h4">Reportes disponibles</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Reporte</th>
+                    <th>Información</th>
+                    <th>Tablas relacionadas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Indicadores financieros</td>
+                    <td>Ingresos, impuestos, descuentos y utilidad estimada.</td>
+                    <td>factura, pago y pedido</td>
+                </tr>
+                <tr>
+                    <td>Consumo de inventario</td>
+                    <td>Entradas, salidas y ajustes de los insumos.</td>
+                    <td>insumo y movimiento_inventario</td>
+                </tr>
+                <tr>
+                    <td>Ocupación de mesas</td>
+                    <td>Uso y rotación de las mesas.</td>
+                    <td>mesa, pedido y reserva</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-muted small">
+        Las cifras mostradas son ejemplos y no corresponden a datos reales de la base de datos.
+    </p>
+</div>
+
+<script>
+// Este botón todavía no calcula datos de MySQL.
+function generarReporte() {
+    alert("Los reportes se conectarán a la API para consultar los datos reales.");
+}
+</script>
+
+</body>
+</html>

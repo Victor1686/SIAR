@@ -5,7 +5,8 @@ const requiredVariables = [
     'DB_HOST',
     'DB_PORT',
     'DB_NAME',
-    'DB_USER'
+    'DB_USER',
+    'JWT_SECRET'
 ];
 
 for (const variable of requiredVariables) {
@@ -21,5 +22,6 @@ module.exports = {
     dbPort: Number(process.env.DB_PORT),
     dbName: process.env.DB_NAME,
     dbUser: process.env.DB_USER,
-    dbPassword: process.env.DB_PASSWORD ?? ''
+    dbPassword: process.env.DB_PASSWORD ?? '',
+    jwtSecret: process.env.JWT_SECRET
 };

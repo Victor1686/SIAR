@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - SIAR</title>
+
+    <!-- Carga Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Barra de navegación para cambiar de módulo -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">SIAR</a>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-light btn-sm" href="index.html">Inicio</a>
+            <a class="btn btn-outline-light btn-sm" href="menu.html">Menú</a>
+            <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar menú</a>
+            <a class="btn btn-outline-light btn-sm" href="usuarios.html">Usuarios</a>
+            <a class="btn btn-outline-light btn-sm" href="facturacion.html">Facturación</a>
+            <a class="btn btn-outline-light btn-sm" href="reportes.html">Reportes</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Gestión de usuarios</h1>
+    <p>Registro y consulta de los usuarios del sistema.</p>
+
+    <!-- Formulario de registro -->
+    <div class="card mb-4">
+        <div class="card-header">Registrar usuario</div>
+        <div class="card-body">
+            <form id="formUsuario">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre completo</label>
+                    <input type="text" id="nombre" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo electrónico</label>
+                    <input type="email" id="correo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="usuario" class="form-label">Nombre de usuario</label>
+                    <input type="text" id="usuario" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contrasena" class="form-label">Contraseña</label>
+                    <input type="password" id="contrasena" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="rol" class="form-label">Rol</label>
+                    <select id="rol" class="form-select" required>
+                        <option value="">Seleccionar rol</option>
+                        <option>Administrador</option>
+                        <option>Cajero</option>
+                        <option>Mesero</option>
+                        <option>Cocinero</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Registrar usuario
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de usuarios de ejemplo -->
+    <h2 class="h4">Usuarios registrados</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody id="tablaUsuarios">
+                <tr>
+                    <td>Laura Martínez</td>
+                    <td>lmartinez</td>
+                    <td>laura@ejemplo.com</td>
+                    <td>Administrador</td>
+                </tr>
+                <tr>
+                    <td>Andrés Ruiz</td>
+                    <td>aruiz</td>
+                    <td>andres@ejemplo.com</td>
+                    <td>Cajero</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-muted small">
+        Los usuarios de la tabla son datos de demostración.
+    </p>
+</div>
+
+<script>
+// Este formulario solo demuestra la interfaz.
+// Todavía no registra usuarios en MySQL.
+document.getElementById("formUsuario").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    alert("Formulario de ejemplo. Falta conectar el registro con la API.");
+
+    this.reset();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación - SIAR</title>
+
+    <!-- Carga Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Barra de navegación -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">SIAR</a>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-light btn-sm" href="index.html">Inicio</a>
+            <a class="btn btn-outline-light btn-sm" href="menu.html">Menú</a>
+            <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar menú</a>
+            <a class="btn btn-outline-light btn-sm" href="usuarios.html">Usuarios</a>
+            <a class="btn btn-outline-light btn-sm" href="facturacion.html">Facturación</a>
+            <a class="btn btn-outline-light btn-sm" href="reportes.html">Reportes</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Facturación</h1>
+    <p>Consulta las facturas y los pagos del restaurante.</p>
+
+    <!-- Filtros visuales -->
+    <div class="card mb-4">
+        <div class="card-header">Consultar facturas</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="fechaInicio" class="form-label">Fecha inicial</label>
+                    <input type="date" id="fechaInicio" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="fechaFin" class="form-label">Fecha final</label>
+                    <input type="date" id="fechaFin" class="form-control">
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary"
+                            onclick="alert('Falta conectar la consulta con la API.')">
+                        Consultar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listado ilustrativo de facturas -->
+    <h2 class="h4">Facturas registradas</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Número</th>
+                    <th>Pedido</th>
+                    <th>Subtotal</th>
+                    <th>Descuento</th>
+                    <th>Impuesto</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>FAC-001</td>
+                    <td>102</td>
+                    <td>$50.000</td>
+                    <td>$0</td>
+                    <td>$9.500</td>
+                    <td>$59.500</td>
+                    <td>Pagada</td>
+                </tr>
+                <tr>
+                    <td>FAC-002</td>
+                    <td>103</td>
+                    <td>$72.000</td>
+                    <td>$5.000</td>
+                    <td>$12.730</td>
+                    <td>$79.730</td>
+                    <td>Pendiente</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario visual de pago -->
+    <div class="card mt-4 mb-4">
+        <div class="card-header">Registrar pago</div>
+        <div class="card-body">
+            <form id="formPago">
+                <div class="mb-3">
+                    <label for="factura" class="form-label">Factura</label>
+                    <select id="factura" class="form-select" required>
+                        <option value="">Seleccionar factura</option>
+                        <option value="FAC-001">FAC-001</option>
+                        <option value="FAC-002">FAC-002</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="metodo" class="form-label">Método de pago</label>
+                    <select id="metodo" class="form-select" required>
+                        <option value="">Seleccionar método</option>
+                        <option>Efectivo</option>
+                        <option>Tarjeta</option>
+                        <option>Transferencia</option>
+                        <option>Mixto</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="monto" class="form-label">Monto recibido</label>
+                    <input type="number" id="monto" class="form-control"
+                           min="1" step="0.01" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Registrar pago
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <p class="text-muted small">
+        Los registros son ficticios. El formulario no realiza cobros ni guarda pagos.
+    </p>
+</div>
+
+<script>
+// El pago se conectará posteriormente con la API.
+document.getElementById("formPago").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    alert("Formulario de ejemplo. Falta conectar el pago con la API.");
+
+    this.reset();
+});
+</script>
+
+</body>
+</html>
