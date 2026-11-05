@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 const mysql = require("mysql2/promise");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 
-// Permitir comunicaciÃ³n desde Live Server durante el desarrollo
+// Permitir comunicación desde Live Server durante el desarrollo
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
@@ -33,22 +33,20 @@ const dbConfig = {
 };
 
 let conexion;
-
 // Validar identificadores positivos
 function idValido(id) {
     return Number.isInteger(id) && id > 0;
-}
+} 
 // =========================
-// SEGURIDAD Y AUTENTICACIÃ“N
+// SEGURIDAD Y AUTENTICACIÓN
 // =========================
-
-// Verificar que el usuario tenga un token vÃ¡lido
+// Verificar que el usuario tenga un token válido
 function verificarToken(req, res, next) {
     const encabezado = req.headers.authorization;
 
     if (!encabezado || !encabezado.startsWith("Bearer ")) {
         return res.status(401).json({
-            error: "Acceso denegado. Debe iniciar sesiÃ³n."
+            error: "Acceso denegado. Debe iniciar sesión."
         });
     }
 
@@ -62,7 +60,7 @@ function verificarToken(req, res, next) {
         next();
     } catch (error) {
         return res.status(401).json({
-            error: "Token invÃ¡lido o vencido."
+            error: "Token inválido o vencido."
         });
     }
 }
@@ -72,7 +70,7 @@ function autorizarRoles(...rolesPermitidos) {
     return (req, res, next) => {
         if (!req.usuario || !rolesPermitidos.includes(req.usuario.rol)) {
             return res.status(403).json({
-                error: "No tiene permisos para realizar esta operaciÃ³n."
+                error: "No tiene permisos para realizar esta operación."
             });
         }
 
@@ -88,16 +86,16 @@ async function iniciarServidor() {
     try {
         conexion = await mysql.createConnection(dbConfig);
 
-        console.log("ConexiÃ³n a MySQL exitosa");
+        console.log("Conexión a MySQL exitosa");
 
         // Ruta principal
         app.get("/", (req, res) => {
             res.json({
                 mensaje: "API del sistema SIAR funcionando"
             });
-        });
+        }); 
 // =========================
-// INICIO DE SESIÃ“N
+// INICIO DE SESIÓN
 // =========================
 app.post("/api/login", async (req, res) => {
     try {
@@ -106,7 +104,7 @@ app.post("/api/login", async (req, res) => {
 
         if (!usuario || typeof contrasena !== "string" || !contrasena) {
             return res.status(400).json({
-                error: "Ingrese usuario y contraseÃ±a"
+                error: "Ingrese usuario y contraseña"
             });
         }
         const [usuarios] = await conexion.execute(
@@ -130,7 +128,7 @@ app.post("/api/login", async (req, res) => {
 
         if (usuarios.length === 0 || usuarios[0].activo !== 1) {
             return res.status(401).json({
-                error: "Usuario o contraseÃ±a incorrectos"
+                error: "Usuario o contraseña incorrectos"
             });
         }
 
@@ -143,7 +141,7 @@ app.post("/api/login", async (req, res) => {
 
         if (!contrasenaCorrecta) {
             return res.status(401).json({
-                error: "Usuario o contraseÃ±a incorrectos"
+                error: "Usuario o contraseña incorrectos"
             });
         }
 
@@ -159,7 +157,7 @@ app.post("/api/login", async (req, res) => {
         );
 
         res.json({
-            mensaje: "Inicio de sesiÃ³n exitoso",
+            mensaje: "Inicio de sesión exitoso",
             token,
             usuario: {
                 id: datosUsuario.id_usuario,
@@ -174,7 +172,7 @@ app.post("/api/login", async (req, res) => {
         console.error("Error en login:", error.message);
 
         res.status(500).json({
-            error: "No se pudo iniciar sesiÃ³n"
+            error: "No se pudo iniciar sesión"
         });
     }
 });
@@ -201,10 +199,10 @@ app.use(
     autorizarRoles("Administrador")
 );
         // =========================
-        // CATEGORÃAS
+        // CATEGORÍAS
         // =========================
 
-        // Consultar categorÃ­as activas
+        // Consultar categorías activas
         app.get("/api/categorias", async (req, res) => {
             try {
                 const [categorias] = await conexion.execute(
@@ -218,12 +216,12 @@ app.use(
             } catch (error) {
                 console.error(error.message);
                 res.status(500).json({
-                    error: "No se pudieron consultar las categorÃ­as"
+                    error: "No se pudieron consultar las categorías"
                 });
             }
         });
 
-        // Crear categorÃ­a
+        // Crear categoría
         app.post("/api/categorias", async (req, res) => {
             try {
                 const nombre = String(req.body.nombre || "").trim();
@@ -244,7 +242,7 @@ app.use(
 
                 if (existentes.length > 0) {
                     return res.status(400).json({
-                        error: "Ya existe una categorÃ­a con ese nombre"
+                        error: "Ya existe una categoría con ese nombre"
                     });
                 }
 
@@ -255,18 +253,18 @@ app.use(
                 );
 
                 res.status(201).json({
-                    mensaje: "CategorÃ­a creada",
+                    mensaje: "Categoría creada",
                     id: resultado.insertId
                 });
             } catch (error) {
                 console.error(error.message);
                 res.status(500).json({
-                    error: "No se pudo crear la categorÃ­a"
+                    error: "No se pudo crear la categoría"
                 });
             }
         });
 
-        // Editar categorÃ­a
+        // Editar categoría
         app.put("/api/categorias/:id", async (req, res) => {
             try {
                 const id = Number(req.params.id);
@@ -274,7 +272,7 @@ app.use(
 
                 if (!idValido(id) || !nombre) {
                     return res.status(400).json({
-                        error: "Datos de categorÃ­a invÃ¡lidos"
+                        error: "Datos de categoría inválidos"
                     });
                 }
 
@@ -289,7 +287,7 @@ app.use(
 
                 if (duplicadas.length > 0) {
                     return res.status(400).json({
-                        error: "Ya existe una categorÃ­a con ese nombre"
+                        error: "Ya existe una categoría con ese nombre"
                     });
                 }
 
@@ -303,29 +301,29 @@ app.use(
 
                 if (resultado.affectedRows === 0) {
                     return res.status(404).json({
-                        error: "CategorÃ­a no encontrada"
+                        error: "Categoría no encontrada"
                     });
                 }
 
                 res.json({
-                    mensaje: "CategorÃ­a actualizada"
+                    mensaje: "Categoría actualizada"
                 });
             } catch (error) {
                 console.error(error.message);
                 res.status(500).json({
-                    error: "No se pudo actualizar la categorÃ­a"
+                    error: "No se pudo actualizar la categoría"
                 });
             }
         });
 
-        // Dar de baja una categorÃ­a
+        // Dar de baja una categoría
         app.delete("/api/categorias/:id", async (req, res) => {
             try {
                 const id = Number(req.params.id);
 
                 if (!idValido(id)) {
                     return res.status(400).json({
-                        error: "Identificador invÃ¡lido"
+                        error: "Identificador inválido"
                     });
                 }
 
@@ -353,17 +351,17 @@ app.use(
 
                 if (resultado.affectedRows === 0) {
                     return res.status(404).json({
-                        error: "CategorÃ­a no encontrada"
+                        error: "Categoría no encontrada"
                     });
                 }
 
                 res.json({
-                    mensaje: "CategorÃ­a dada de baja"
+                    mensaje: "Categoría dada de baja"
                 });
             } catch (error) {
                 console.error(error.message);
                 res.status(500).json({
-                    error: "No se pudo dar de baja la categorÃ­a"
+                    error: "No se pudo dar de baja la categoría"
                 });
             }
         });
@@ -424,7 +422,7 @@ app.use(
                     !idValido(categoria)
                 ) {
                     return res.status(400).json({
-                        error: "Verifique el nombre, precio y categorÃ­a"
+                        error: "Verifique el nombre, precio y categoría"
                     });
                 }
 
@@ -438,7 +436,7 @@ app.use(
 
                 if (categorias.length === 0) {
                     return res.status(400).json({
-                        error: "La categorÃ­a seleccionada no existe o estÃ¡ inactiva"
+                        error: "La categoría seleccionada no existe o está inactiva"
                     });
                 }
 
@@ -492,7 +490,7 @@ app.use(
                     !idValido(categoria)
                 ) {
                     return res.status(400).json({
-                        error: "Datos del producto invÃ¡lidos"
+                        error: "Datos del producto inválidos"
                     });
                 }
 
@@ -506,7 +504,7 @@ app.use(
 
                 if (categorias.length === 0) {
                     return res.status(400).json({
-                        error: "La categorÃ­a no existe o estÃ¡ inactiva"
+                        error: "La categoría no existe o está inactiva"
                     });
                 }
 
@@ -553,7 +551,7 @@ app.use(
 
                 if (!idValido(id)) {
                     return res.status(400).json({
-                        error: "Identificador invÃ¡lido"
+                        error: "Identificador inválido"
                     });
                 }
 
@@ -589,7 +587,7 @@ app.use(
 
                 if (!idValido(id)) {
                     return res.status(400).json({
-                        error: "Identificador invÃ¡lido"
+                        error: "Identificador inválido"
                     });
                 }
 
