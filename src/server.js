@@ -3,6 +3,7 @@ const mysql = require("mysql2/promise");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("./config/env");
+const pedidosService = require("./business/pedidos-service");
 require("dotenv").config();
 
 const app = express();
@@ -167,10 +168,8 @@ app.post("/api/login", async (req, res) => {
                 permisos: datosUsuario.permisos
             }
         });
-
     } catch (error) {
-        console.error("Error en login:", error.message);
-
+        console.error("Error en login:", error);
         res.status(500).json({
             error: "No se pudo iniciar sesión"
         });
@@ -645,7 +644,7 @@ app.use(
         });
 
     } catch (error) {
-        console.error("Error al iniciar SIAR:", error.message);
+        console.error("Error al iniciar SIAR:", error);
     }
 }
 
