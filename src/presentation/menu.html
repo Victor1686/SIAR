@@ -1,51 +1,215 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Menú - SIAR</title>
 
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css"
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css"
         rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        .menu-hero {
+            background: var(--vino);
+            color: var(--crema);
+            padding: 65px 0;
+            text-align: center;
+        }
+
+        .menu-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+
+        .menu-contenido {
+            padding: 55px 0 75px;
+        }
+
+        .categoria-titulo {
+            color: var(--vino-oscuro);
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--oro);
+            padding-bottom: 12px;
+            margin-bottom: 22px;
+        }
+
+        .producto-card {
+            height: 100%;
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            padding: 22px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(42, 36, 32, 0.09);
+        }
+
+        .producto-nombre {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            color: var(--carbon);
+        }
+
+        .producto-descripcion {
+            color: var(--gris);
+            font-size: 0.92rem;
+            min-height: 42px;
+        }
+
+        .producto-precio {
+            color: var(--vino);
+            font-family: 'Fraunces', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .producto-agotado {
+            opacity: 0.7;
+        }
+
+        .mensaje-vacio {
+            text-align: center;
+            padding: 35px;
+            color: var(--gris);
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .menu-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <!-- NAVEGACIÓN -->
-    <nav class="navbar navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-md navbar-dark">
         <div class="container">
 
-            <span class="navbar-brand">SIAR - Menú</span>
+            <a class="navbar-brand" href="index.html">
+                SIAR <span class="marca-acento">Restaurante</span>
+            </a>
 
-            <div class="d-flex flex-wrap gap-2">
-                <a class="btn btn-outline-light btn-sm" href="menu.html">Menú</a>
-                <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar menú</a>
-                <a class="btn btn-outline-light btn-sm" href="usuarios.html">Usuarios</a>
-                <a class="btn btn-outline-light btn-sm" href="facturacion.html">Facturación</a>
-                <a class="btn btn-outline-light btn-sm" href="reportes.html">Reportes</a>
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="menu.html">Menú</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="pedidos.html">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="mesas.html">Mesas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">Inventario</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-menu.html">Administrar menú</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="usuarios.html">Usuarios</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="facturacion.html">Facturación</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">Reportes</a>
+                    </li>
+                </ul>
+
+                <div class="d-none ms-md-3 mt-3 mt-md-0" id="itemSalir">
+                    <button class="btn btn-cerrar-sesion"
+                        id="btnSalir" type="button">
+                        Cerrar sesión
+                    </button>
+                </div>
+
             </div>
-
         </div>
     </nav>
 
-    <!-- CONTENIDO -->
-    <main class="container">
-
-        <h1 class="mb-4">Nuestro menú</h1>
-
-        <div id="menu">
-            <p>Cargando menú...</p>
+    <!-- ENCABEZADO -->
+    <header class="menu-hero">
+        <div class="container">
+            <p class="eyebrow">Sabores preparados para compartir</p>
+            <h1>Nuestro menú</h1>
+            <p>Descubre nuestros productos y sus precios.</p>
         </div>
+    </header>
 
+    <!-- PRODUCTOS -->
+    <main class="menu-contenido">
+        <div class="container">
+
+            <div id="estadoMenu" class="text-center mb-4">
+                Cargando menú...
+            </div>
+
+            <div id="menu"></div>
+
+        </div>
     </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>SIAR · Sistema Integral de Administración para Restaurantes</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
     <script src="menu-data.js"></script>
 
     <script>
+        // CERRAR SESIÓN
+        const itemSalir = document.getElementById("itemSalir");
+        const btnSalir = document.getElementById("btnSalir");
 
-        // Escapar caracteres especiales
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            itemSalir.classList.remove("d-none");
+        }
+
+        btnSalir.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+            window.location.href = "index.html";
+        });
+
         const esc = texto => String(texto ?? "").replace(/[&<>"']/g, c => ({
             "&": "&amp;",
             "<": "&lt;",
@@ -54,13 +218,13 @@
             "'": "&#39;"
         }[c]));
 
-        // Formato de pesos colombianos
         const dinero = valor =>
             "$" + Number(valor).toLocaleString("es-CO");
 
-        // Cargar menú desde la API
         async function cargarMenu() {
+
             const contenedor = document.getElementById("menu");
+            const estado = document.getElementById("estadoMenu");
 
             try {
 
@@ -73,20 +237,20 @@
 
                 categorias.forEach(categoria => {
 
-                    const items = productos.filter(
-                        p => Number(p.categoriaId) === Number(categoria.id)
+                    const items = productos.filter(producto =>
+                        Number(producto.categoriaId) === Number(categoria.id)
                     );
 
                     if (items.length === 0) return;
 
                     html += `
-                        <section class="mb-4">
+                        <section class="mb-5">
 
-                            <h2 class="h4 mb-3">
+                            <h2 class="categoria-titulo">
                                 ${esc(categoria.nombre)}
                             </h2>
 
-                            <div class="list-group">
+                            <div class="row g-4">
                     `;
 
                     items.forEach(producto => {
@@ -95,31 +259,35 @@
                             Number(producto.disponible) === 1;
 
                         html += `
-                            <div class="list-group-item
-                                d-flex justify-content-between align-items-center
-                                ${disponible ? "" : "text-muted"}">
+                            <div class="col-md-6 col-lg-4">
 
-                                <div>
+                                <article class="producto-card
+                                    ${disponible ? "" : "producto-agotado"}">
 
-                                    <strong>
-                                        ${esc(producto.nombre)}
-                                    </strong>
+                                    <div class="d-flex justify-content-between
+                                        align-items-start gap-2 mb-3">
 
-                                    ${
-                                        disponible
-                                            ? ""
-                                            : '<span class="badge bg-secondary ms-2">Agotado</span>'
-                                    }
+                                        <h3 class="producto-nombre mb-0">
+                                            ${esc(producto.nombre)}
+                                        </h3>
 
-                                    <div class="small">
-                                        ${esc(producto.descripcion || "")}
+                                        ${
+                                            disponible
+                                            ? '<span class="badge bg-success">Disponible</span>'
+                                            : '<span class="badge bg-secondary">Agotado</span>'
+                                        }
+
                                     </div>
 
-                                </div>
+                                    <p class="producto-descripcion">
+                                        ${esc(producto.descripcion || "Producto del restaurante.")}
+                                    </p>
 
-                                <span class="fw-bold">
-                                    ${dinero(producto.precio)}
-                                </span>
+                                    <div class="producto-precio">
+                                        ${dinero(producto.precio)}
+                                    </div>
+
+                                </article>
 
                             </div>
                         `;
@@ -131,21 +299,25 @@
                     `;
                 });
 
-                contenedor.innerHTML =
-                    html || "<p>No hay productos registrados en el menú.</p>";
+                contenedor.innerHTML = html;
+
+                estado.textContent = html
+                    ? ""
+                    : "Todavía no hay productos registrados.";
 
             } catch (error) {
 
-                contenedor.innerHTML = `
+                estado.innerHTML = `
                     <div class="alert alert-danger">
                         ${esc(error.message)}
                     </div>
                 `;
+
+                contenedor.innerHTML = "";
             }
         }
 
         cargarMenu();
-
     </script>
 
 </body>

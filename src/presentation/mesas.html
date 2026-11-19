@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesas | SIAR</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        :root {
+            --borgona: #541821;
+            --vino: #70232D;
+            --crema: #F5F0E6;
+            --oro: #B88A3B;
+            --carbon: #2A2420;
+            --gris: #756B62;
+            --borde: #DED5C8;
+        }
+
+        body {
+            background: var(--crema);
+            color: var(--carbon);
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .navbar-siar .nav-link:hover,
+        .navbar-siar .nav-link.active {
+            color: #e4bd75;
+        }
+
+        .encabezado {
+            background: var(--vino);
+            color: white;
+            padding: 35px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .encabezado h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 2.2rem;
+        }
+
+        .encabezado p {
+            color: #eadcce;
+            margin-bottom: 0;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 22px;
+            height: 100%;
+        }
+
+        .panel-titulo {
+            font-family: 'Fraunces', serif;
+            color: var(--borgona);
+            font-size: 1.3rem;
+        }
+
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .resumen-item {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .resumen-item span {
+            color: var(--gris);
+            font-size: .9rem;
+        }
+
+        .resumen-item strong {
+            display: block;
+            font-size: 1.8rem;
+            color: var(--borgona);
+            margin-top: 5px;
+        }
+
+        .btn-siar {
+            background: var(--oro);
+            color: var(--carbon);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-weight: 600;
+        }
+
+        .btn-siar:hover {
+            background: #a67734;
+            color: white;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--borde);
+            padding: 10px;
+            border-radius: 7px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--oro);
+            box-shadow: 0 0 0 .2rem rgba(184,138,59,.15);
+        }
+
+        #listaMesas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .mesa {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .mesa h3 {
+            color: var(--borgona);
+            font-family: 'Fraunces', serif;
+        }
+
+        .mesa p {
+            color: var(--gris);
+            margin-bottom: 8px;
+        }
+
+        .mesa .estado {
+            font-weight: 600;
+        }
+
+        .mesa button {
+            background: var(--oro);
+            color: var(--carbon);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .mesa select {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .modal-contenido {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .modal-contenido h2 {
+            color: var(--borgona);
+            font-family: 'Fraunces', serif;
+            margin-bottom: 20px;
+        }
+
+        .modal-contenido input {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cancelar {
+            background: #777;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 10px 18px;
+        }
+
+        footer {
+            color: var(--gris);
+        }
+
+        @media(max-width: 768px) {
+            .resumen {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .encabezado {
+                padding: 25px;
+            }
+        }
+
+        @media(max-width: 400px) {
+            .resumen {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- NAVEGACIÓN SIAR -->
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+
+        <a class="navbar-brand" href="index.html">
+            SIAR <span class="marca-acento">Restaurante</span>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navAdmin"
+            aria-controls="navAdmin" aria-expanded="false"
+            aria-label="Abrir navegación">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navAdmin">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="menu.html">Menú</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pedidos.html">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="mesas.html">Mesas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="inventario.html">Inventario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin-menu.html">Administrar menú</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="usuarios.html">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="facturacion.html">Facturación</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reportes.html">Reportes</a>
+                </li>
+            </ul>
+
+            <div class="d-none ms-md-3 mt-3 mt-md-0" id="itemSalir">
+                <button id="btnSalir" class="btn btn-cerrar-sesion"
+                    type="button" onclick="cerrarSesion()">
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<main class="container pb-5">
+
+    <section class="encabezado">
+        <h1>Gestión de mesas</h1>
+        <p>Administra las mesas, su capacidad, ubicación y disponibilidad.</p>
+    </section>
+
+    <section class="resumen">
+        <div class="resumen-item">
+            <span>Total de mesas</span>
+            <strong id="total">0</strong>
+        </div>
+
+        <div class="resumen-item">
+            <span>Disponibles</span>
+            <strong id="disponibles">0</strong>
+        </div>
+
+        <div class="resumen-item">
+            <span>Ocupadas</span>
+            <strong id="ocupadas">0</strong>
+        </div>
+
+        <div class="resumen-item">
+            <span>Reservadas</span>
+            <strong id="reservadas">0</strong>
+        </div>
+    </section>
+
+    <section class="panel mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="panel-titulo mb-1">Mesas registradas</h2>
+                <p class="text-secondary mb-0">
+                    Consulta y administra las mesas del restaurante.
+                </p>
+            </div>
+
+            <button class="btn btn-siar" onclick="abrirFormulario()">
+                + Nueva mesa
+            </button>
+        </div>
+
+        <div class="row g-2 mb-4">
+            <div class="col-md-6">
+                <input type="text" id="busqueda" class="form-control"
+                    placeholder="Buscar por número de mesa...">
+            </div>
+
+            <div class="col-md-6">
+                <select id="filtroEstado" class="form-select">
+                    <option value="">Todos los estados</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="Ocupada">Ocupada</option>
+                    <option value="Reservada">Reservada</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="mensaje" class="alert" role="alert"></div>
+
+        <div id="listaMesas"></div>
+    </section>
+
+</main>
+
+<div class="modal" id="modal">
+    <div class="modal-contenido">
+
+        <h2 id="tituloFormulario">Registrar mesa</h2>
+
+        <form id="formMesa">
+
+            <input type="hidden" id="idMesa">
+
+            <label class="form-label">Número de mesa</label>
+            <input type="number" id="numero" class="form-control"
+                min="1" required>
+
+            <label class="form-label">Capacidad</label>
+            <input type="number" id="capacidad" class="form-control"
+                min="1" required>
+
+            <label class="form-label">Ubicación</label>
+            <input type="text" id="ubicacion" class="form-control"
+                maxlength="100" required>
+
+            <div class="acciones mt-3">
+                <button type="submit" class="btn btn-siar">Guardar</button>
+                <button type="button" class="cancelar"
+                    onclick="cerrarFormulario()">Cancelar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<footer class="text-center py-4">
+    <p class="mb-0">
+        SIAR · Sistema Integral de Administración para Restaurantes
+    </p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="mesas.js"></script>
+
+</body>
+</html>

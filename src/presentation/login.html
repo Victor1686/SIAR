@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | SIAR</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: var(--crema);
+            color: var(--carbon);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-contenedor {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 15px;
+        }
+
+        .login-tarjeta {
+            width: 100%;
+            max-width: 440px;
+            padding: 35px;
+            background: var(--blanco);
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+        }
+
+        .login-tarjeta h1 {
+            color: var(--vino-oscuro);
+            font-family: 'Fraunces', serif;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitulo {
+            color: var(--gris);
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .form-control {
+            border-color: var(--borde);
+            padding: 10px 12px;
+        }
+
+        .form-control:focus {
+            border-color: var(--oro);
+            box-shadow: 0 0 0 .2rem rgba(184, 138, 59, .15);
+        }
+
+        .btn-siar {
+            background: var(--oro);
+            color: var(--carbon);
+            border: 1px solid var(--oro);
+        }
+
+        .btn-siar:hover {
+            background: var(--oro-hover);
+            border-color: var(--oro-hover);
+            color: var(--carbon);
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            SIAR <span class="marca-acento">Restaurante</span>
+        </a>
+    </div>
+</nav>
+
+<main class="login-contenedor">
+    <section class="login-tarjeta">
+        <h1>Administración</h1>
+        <p class="subtitulo">Ingresa para acceder al sistema SIAR.</p>
+
+        <div id="alerta" class="alert d-none" role="alert"></div>
+
+        <form id="formLogin">
+            <div class="mb-3">
+                <label for="loginUsuario" class="form-label">Usuario</label>
+                <input type="text" id="loginUsuario" class="form-control"
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="username" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="loginContrasena" class="form-label">Contraseña</label>
+                <input type="password" id="loginContrasena" class="form-control"
+                    placeholder="Ingresa tu contraseña"
+                    autocomplete="current-password" required>
+            </div>
+
+            <button type="submit" class="btn btn-siar w-100" id="btnIngresar">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="index.html" class="text-decoration-none" style="color: var(--vino);">
+                Volver al restaurante
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="text-center py-4">
+    <p class="mb-0">SIAR · Sistema Integral de Administración para Restaurantes</p>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function aviso(texto, bien = false) {
+    $("alerta").className = "alert alert-" + (bien ? "success" : "danger");
+    $("alerta").textContent = texto;
+}
+
+async function iniciarSesion(evento) {
+    evento.preventDefault();
+
+    const usuario = $("loginUsuario").value.trim();
+    const contrasena = $("loginContrasena").value;
+    const boton = $("btnIngresar");
+
+    boton.disabled = true;
+    boton.textContent = "Verificando...";
+
+    try {
+        const respuesta = await fetch("http://localhost:3000/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ usuario, contrasena })
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(datos.error || "No se pudo iniciar sesión");
+        }
+
+        if (!datos.token) {
+            throw new Error("El servidor no devolvió un token.");
+        }
+
+        localStorage.setItem("token", datos.token);
+        localStorage.setItem("usuario", JSON.stringify(datos.usuario));
+
+        $("loginContrasena").value = "";
+        window.location.href = "admin-menu.html";
+
+    } catch (error) {
+        aviso(error.message, false);
+        boton.disabled = false;
+        boton.textContent = "Iniciar sesión";
+    }
+}
+
+$("formLogin").addEventListener("submit", iniciarSesion);
+
+// Si ya existe una sesión, entrar al módulo sin volver a pedir credenciales.
+if (localStorage.getItem("token")) {
+    window.location.href = "admin-menu.html";
+}
+</script>
+</body>
+</html>

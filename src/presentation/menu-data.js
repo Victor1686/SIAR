@@ -1,20 +1,20 @@
-// =====================================================================
-// ARCHIVO: menu-data.js
-// FUNCION: Conectar las páginas del menú con la API de SIAR.
-// Los datos se consultan y guardan en MySQL.
-// =====================================================================
 
 const MenuData = (() => {
 
     const API = "http://localhost:3000/api";
 
-    // Realizar solicitudes a la API
+    // SOLICITUDES A LA API
     async function solicitar(ruta, opciones = {}) {
         try {
+            const token = localStorage.getItem("token");
+
             const respuesta = await fetch(`${API}${ruta}`, {
                 ...opciones,
                 headers: {
                     "Content-Type": "application/json",
+                    ...(token ? {
+                        Authorization: `Bearer ${token}`
+                    } : {}),
                     ...(opciones.headers || {})
                 }
             });
@@ -38,92 +38,81 @@ const MenuData = (() => {
 
     return {
 
-        // Consultar categorías
+        // INICIAR SESIÓN
+        async iniciarSesion(usuario, contrasena) {
+            const datos = await solicitar("/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    usuario,
+                    contrasena
+                })
+            });
+
+            localStorage.setItem("token", datos.token);
+            localStorage.setItem(
+                "usuario",
+                JSON.stringify(datos.usuario)
+            );
+
+            return datos;
+        },
+
+        // CERRAR SESIÓN
+        cerrarSesion() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+        },
+
+        // CATEGORÍAS
         async categorias() {
             return await solicitar("/categorias");
         },
 
-        // Consultar productos
-        async productos() {
-            return await solicitar("/productos");
-        },
-
-        // Crear o editar categoría
         async guardarCategoria({ id, nombre }) {
-            nombre = String(nombre || "").trim();
-
-            if (!nombre) {
-                throw new Error("El nombre de la categoría es obligatorio.");
-            }
-
-            if (id) {
-                return await solicitar(`/categorias/${id}`, {
-                    method: "PUT",
+            return await solicitar(
+                id ? `/categorias/${id}` : "/categorias",
+                {
+                    method: id ? "PUT" : "POST",
                     body: JSON.stringify({ nombre })
-                });
-            }
-
-            return await solicitar("/categorias", {
-                method: "POST",
-                body: JSON.stringify({ nombre })
-            });
+                }
+            );
         },
 
-        // Dar de baja categoría
         async eliminarCategoria(id) {
             return await solicitar(`/categorias/${id}`, {
                 method: "DELETE"
             });
         },
 
-        // Crear o editar producto
-        async guardarProducto(producto) {
-            const datos = {
-                nombre: String(producto.nombre || "").trim(),
-                descripcion: producto.descripcion || "",
-                precio: Number(producto.precio),
-                categoriaId: Number(producto.categoriaId),
-                imagen: producto.imagen || ""
-            };
-
-            if (!datos.nombre) {
-                throw new Error("El nombre del producto es obligatorio.");
-            }
-
-            if (!Number.isFinite(datos.precio) || datos.precio <= 0) {
-                throw new Error("El precio debe ser un número positivo.");
-            }
-
-            if (!Number.isInteger(datos.categoriaId) || datos.categoriaId <= 0) {
-                throw new Error("Seleccione una categoría.");
-            }
-
-            if (producto.id) {
-                return await solicitar(`/productos/${producto.id}`, {
-                    method: "PUT",
-                    body: JSON.stringify(datos)
-                });
-            }
-
-            return await solicitar("/productos", {
-                method: "POST",
-                body: JSON.stringify(datos)
-            });
+        // PRODUCTOS
+        async productos() {
+            return await solicitar("/productos");
         },
 
-        // Dar de baja producto
+        async guardarProducto(producto) {
+            return await solicitar(
+                producto.id
+                    ? `/productos/${producto.id}`
+                    : "/productos",
+                {
+                    method: producto.id ? "PUT" : "POST",
+                    body: JSON.stringify(producto)
+                }
+            );
+        },
+
         async bajaProducto(id) {
             return await solicitar(`/productos/${id}`, {
                 method: "DELETE"
             });
         },
 
-        // Cambiar disponibilidad
         async alternarDisponible(id) {
             return await solicitar(`/productos/${id}/disponibilidad`, {
                 method: "PATCH"
             });
         }
+
     };
 
 })();

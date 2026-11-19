@@ -1,125 +1,827 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Usuarios - SIAR</title>
 
-    <!-- Carga Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <style>
+        .usuarios-hero {
+            background: var(--vino);
+            color: var(--crema);
+            padding: 65px 0;
+            text-align: center;
+        }
+
+        .usuarios-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+
+        .usuarios-contenido {
+            padding: 55px 0 75px;
+        }
+
+        .panel-usuarios {
+            background: var(--blanco);
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            padding: 24px;
+            height: 100%;
+        }
+
+        .panel-titulo {
+            font-family: 'Fraunces', serif;
+            color: var(--vino-oscuro);
+            font-size: 1.35rem;
+            margin-bottom: 20px;
+        }
+
+        .roles-contenedor {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .rol-opcion {
+            border: 1px solid var(--borde);
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--blanco);
+        }
+
+        .rol-opcion:has(input:checked) {
+            border-color: var(--oro);
+            background: #fbf6ec;
+        }
+
+        .rol-opcion input {
+            accent-color: var(--verde);
+        }
+
+        .etiqueta-rol {
+            display: inline-block;
+            background: #f2e8d5;
+            color: var(--vino-oscuro);
+            padding: 5px 9px;
+            margin: 2px;
+            border-radius: 20px;
+            font-size: .78rem;
+            font-weight: 600;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: .78rem;
+            font-weight: 700;
+        }
+
+        .estado-activo {
+            background: #e5eddf;
+            color: #45613a;
+        }
+
+        .estado-inactivo {
+            background: #f4e3e1;
+            color: #8a3430;
+        }
+
+        .texto-secundario {
+            color: var(--gris);
+        }
+
+        .alerta {
+            display: none;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .modal-content {
+            border-radius: 8px;
+            border: 1px solid var(--borde);
+        }
+
+        .modal-header {
+            background: var(--vino-oscuro);
+            color: var(--crema);
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+
+        @media (max-width: 768px) {
+            .usuarios-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .roles-contenedor {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- Barra de navegación para cambiar de módulo -->
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="index.html">SIAR</a>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
 
-        <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-outline-light btn-sm" href="index.html">Inicio</a>
-            <a class="btn btn-outline-light btn-sm" href="menu.html">Menú</a>
-            <a class="btn btn-outline-light btn-sm" href="admin-menu.html">Administrar menú</a>
-            <a class="btn btn-outline-light btn-sm" href="usuarios.html">Usuarios</a>
-            <a class="btn btn-outline-light btn-sm" href="facturacion.html">Facturación</a>
-            <a class="btn btn-outline-light btn-sm" href="reportes.html">Reportes</a>
+            <a class="navbar-brand" href="index.html">
+                SIAR <span class="marca-acento">Restaurante</span>
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menú</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="pedidos.html">Pedidos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="mesas.html">Mesas</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">Inventario</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-menu.html">Administrar menú</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="usuarios.html">Usuarios</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="facturacion.html">Facturación</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">Reportes</a>
+                    </li>
+
+                </ul>
+
+                <div class="d-none ms-md-3 mt-3 mt-md-0" id="itemSalir">
+                    <button class="btn btn-cerrar-sesion"
+                        id="btnSalir" type="button">
+                        Cerrar sesión
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- ENCABEZADO -->
+    <header class="usuarios-hero">
+        <div class="container">
+            <p class="eyebrow">Administración del personal</p>
+            <h1>Gestión de usuarios</h1>
+            <p>Administra las cuentas, responsabilidades y permisos del personal.</p>
+        </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="usuarios-contenido">
+        <div class="container">
+
+            <div id="mensaje" class="alert alerta" role="alert"></div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <section class="panel-usuarios">
+
+                        <h2 class="panel-titulo">Registrar usuario</h2>
+
+                        <form id="formUsuario">
+
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">
+                                    Nombre completo
+                                </label>
+
+                                <input type="text" id="nombre" class="form-control"
+                                    maxlength="100" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">
+                                    Correo electrónico
+                                </label>
+
+                                <input type="email" id="correo" class="form-control"
+                                    maxlength="150" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label">
+                                    Nombre de usuario
+                                </label>
+
+                                <input type="text" id="usuario" class="form-control"
+                                    maxlength="50" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contrasena" class="form-label">
+                                    Contraseña
+                                </label>
+
+                                <input type="password" id="contrasena" class="form-control"
+                                    minlength="8" required>
+
+                                <small class="texto-secundario">
+                                    Mínimo 8 caracteres.
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Roles asignados</label>
+
+                                <div id="listaRoles" class="roles-contenedor">
+                                    <span class="texto-secundario">
+                                        Cargando roles...
+                                    </span>
+                                </div>
+
+                                <small class="texto-secundario">
+                                    Puedes seleccionar varios roles.
+                                </small>
+                            </div>
+
+                            <button type="submit" id="btnRegistrar"
+                                class="btn btn-primary w-100">
+                                Registrar usuario
+                            </button>
+
+                        </form>
+                    </section>
+                </div>
+
+                <div class="col-lg-8">
+                    <section class="panel-usuarios">
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+                            <div>
+                                <h2 class="panel-titulo mb-1">
+                                    Usuarios registrados
+                                </h2>
+
+                                <p class="texto-secundario small mb-0">
+                                    Personal registrado en el sistema SIAR.
+                                </p>
+                            </div>
+
+                            <button class="btn btn-outline-secondary btn-sm"
+                                id="btnActualizar" type="button">
+                                Actualizar listado
+                            </button>
+
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover tabla-siar">
+
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Usuario</th>
+                                        <th>Correo</th>
+                                        <th>Roles</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tablaUsuarios">
+                                    <tr>
+                                        <td colspan="6" class="text-center texto-secundario">
+                                            Cargando usuarios...
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- VENTANA PARA EDITAR USUARIO -->
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar usuario</h5>
+
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="formEditar">
+
+                        <input type="hidden" id="editarId">
+
+                        <div class="mb-3">
+                            <label for="editarNombre" class="form-label">
+                                Nombre completo
+                            </label>
+
+                            <input type="text" id="editarNombre"
+                                class="form-control" maxlength="100" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editarCorreo" class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input type="email" id="editarCorreo"
+                                class="form-control" maxlength="150" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editarUsuario" class="form-label">
+                                Nombre de usuario
+                            </label>
+
+                            <input type="text" id="editarUsuario"
+                                class="form-control" maxlength="50" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Roles asignados</label>
+
+                            <div id="listaRolesEditar" class="roles-contenedor">
+                                Cargando roles...
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" form="formEditar"
+                        id="btnGuardarEdicion" class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </div>
         </div>
     </div>
-</nav>
 
-<div class="container">
-    <h1>Gestión de usuarios</h1>
-    <p>Registro y consulta de los usuarios del sistema.</p>
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>SIAR · Sistema Integral de Administración para Restaurantes</p>
+    </footer>
 
-    <!-- Formulario de registro -->
-    <div class="card mb-4">
-        <div class="card-header">Registrar usuario</div>
-        <div class="card-body">
-            <form id="formUsuario">
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre completo</label>
-                    <input type="text" id="nombre" class="form-control" required>
-                </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-                <div class="mb-3">
-                    <label for="correo" class="form-label">Correo electrónico</label>
-                    <input type="email" id="correo" class="form-control" required>
-                </div>
+    <script>
+        const API = "http://localhost:3000/api";
+        const token = localStorage.getItem("token");
 
-                <div class="mb-3">
-                    <label for="usuario" class="form-label">Nombre de usuario</label>
-                    <input type="text" id="usuario" class="form-control" required>
-                </div>
+        // CERRAR SESIÓN
+        const itemSalir = document.getElementById("itemSalir");
+        const btnSalir = document.getElementById("btnSalir");
 
-                <div class="mb-3">
-                    <label for="contrasena" class="form-label">Contraseña</label>
-                    <input type="password" id="contrasena" class="form-control" required>
-                </div>
+        if (token) {
+            itemSalir.classList.remove("d-none");
+        }
 
-                <div class="mb-3">
-                    <label for="rol" class="form-label">Rol</label>
-                    <select id="rol" class="form-select" required>
-                        <option value="">Seleccionar rol</option>
-                        <option>Administrador</option>
-                        <option>Cajero</option>
-                        <option>Mesero</option>
-                        <option>Cocinero</option>
-                    </select>
-                </div>
+        btnSalir.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+            window.location.href = "index.html";
+        });
 
-                <button type="submit" class="btn btn-primary">
-                    Registrar usuario
-                </button>
-            </form>
-        </div>
-    </div>
+        const form = document.getElementById("formUsuario");
+        const formEditar = document.getElementById("formEditar");
+        const tabla = document.getElementById("tablaUsuarios");
+        const listaRoles = document.getElementById("listaRoles");
+        const listaRolesEditar = document.getElementById("listaRolesEditar");
+        const mensaje = document.getElementById("mensaje");
 
-    <!-- Tabla de usuarios de ejemplo -->
-    <h2 class="h4">Usuarios registrados</h2>
+        const modalEditar = new bootstrap.Modal(
+            document.getElementById("modalEditar")
+        );
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Usuario</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                </tr>
-            </thead>
-            <tbody id="tablaUsuarios">
-                <tr>
-                    <td>Laura Martínez</td>
-                    <td>lmartinez</td>
-                    <td>laura@ejemplo.com</td>
-                    <td>Administrador</td>
-                </tr>
-                <tr>
-                    <td>Andrés Ruiz</td>
-                    <td>aruiz</td>
-                    <td>andres@ejemplo.com</td>
-                    <td>Cajero</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        let usuariosActuales = [];
+        let rolesDisponibles = [];
 
-    <p class="text-muted small">
-        Los usuarios de la tabla son datos de demostración.
-    </p>
-</div>
+        function mostrarMensaje(texto, tipo = "success") {
+            mensaje.textContent = texto;
+            mensaje.className = `alert alert-${tipo}`;
+            mensaje.style.display = "block";
 
-<script>
-// Este formulario solo demuestra la interfaz.
-// Todavía no registra usuarios en MySQL.
-document.getElementById("formUsuario").addEventListener("submit", function(event) {
-    event.preventDefault();
+            window.setTimeout(() => {
+                mensaje.style.display = "none";
+            }, 4500);
+        }
 
-    alert("Formulario de ejemplo. Falta conectar el registro con la API.");
+        async function consultarAPI(ruta, opciones = {}) {
+            const respuesta = await fetch(`${API}${ruta}`, {
+                ...opciones,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                    ...opciones.headers
+                }
+            });
 
-    this.reset();
-});
-</script>
+            const datos = await respuesta.json();
+
+            if (!respuesta.ok) {
+                throw new Error(datos.error || "No se pudo completar la operación");
+            }
+
+            return datos;
+        }
+
+        function crearCheckboxRol(rol, contenedor, seleccionados = []) {
+            const etiqueta = document.createElement("label");
+            etiqueta.className = "rol-opcion";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.name = "roles";
+            checkbox.value = rol.id_rol;
+            checkbox.className = "me-2";
+            checkbox.checked = seleccionados.includes(Number(rol.id_rol));
+
+            const texto = document.createElement("span");
+            texto.textContent = rol.nombre;
+
+            etiqueta.append(checkbox, texto);
+            contenedor.appendChild(etiqueta);
+        }
+
+        async function cargarRoles() {
+            try {
+                rolesDisponibles = await consultarAPI("/roles");
+
+                listaRoles.innerHTML = "";
+                listaRolesEditar.innerHTML = "";
+
+                rolesDisponibles.forEach(rol => {
+                    crearCheckboxRol(rol, listaRoles);
+                    crearCheckboxRol(rol, listaRolesEditar);
+                });
+
+            } catch (error) {
+                listaRoles.textContent = "No se pudieron cargar los roles.";
+                listaRolesEditar.textContent = "No se pudieron cargar los roles.";
+                mostrarMensaje(error.message, "danger");
+            }
+        }
+
+        async function cargarUsuarios() {
+            try {
+                usuariosActuales = await consultarAPI("/usuarios");
+                tabla.innerHTML = "";
+
+                if (usuariosActuales.length === 0) {
+                    tabla.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center texto-secundario">
+                                No hay usuarios registrados.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                usuariosActuales.forEach(usuario => {
+                    const fila = document.createElement("tr");
+
+                    const valores = [
+                        usuario.nombre,
+                        usuario.usuario,
+                        usuario.correo
+                    ];
+
+                    valores.forEach(valor => {
+                        const celda = document.createElement("td");
+                        celda.textContent = valor;
+                        fila.appendChild(celda);
+                    });
+
+                    // Roles
+                    const celdaRoles = document.createElement("td");
+
+                    if (usuario.roles && usuario.roles.length > 0) {
+                        usuario.roles.forEach(rol => {
+                            const etiqueta = document.createElement("span");
+                            etiqueta.className = "etiqueta-rol";
+                            etiqueta.textContent = rol.nombre || rol;
+                            celdaRoles.appendChild(etiqueta);
+                        });
+                    } else {
+                        celdaRoles.textContent = "Sin roles";
+                    }
+
+                    fila.appendChild(celdaRoles);
+
+                    // Estado
+                    const celdaEstado = document.createElement("td");
+                    const estado = document.createElement("span");
+
+                    const activo = Number(usuario.activo) === 1;
+
+                    estado.className = activo
+                        ? "estado estado-activo"
+                        : "estado estado-inactivo";
+
+                    estado.textContent = activo ? "Activo" : "Inactivo";
+
+                    celdaEstado.appendChild(estado);
+                    fila.appendChild(celdaEstado);
+
+                    // Acciones
+                    const celdaAcciones = document.createElement("td");
+                    const acciones = document.createElement("div");
+                    acciones.className = "acciones";
+
+                    const botonEditar = document.createElement("button");
+                    botonEditar.type = "button";
+                    botonEditar.className = "btn btn-sm btn-outline-secondary";
+                    botonEditar.textContent = "Editar";
+                    botonEditar.dataset.accion = "editar";
+                    botonEditar.dataset.id = usuario.id;
+
+                    const botonEstado = document.createElement("button");
+                    botonEstado.type = "button";
+                    botonEstado.className = activo
+                        ? "btn btn-sm btn-outline-danger"
+                        : "btn btn-sm btn-outline-secondary";
+
+                    botonEstado.textContent = activo ? "Desactivar" : "Activar";
+                    botonEstado.dataset.accion = "estado";
+                    botonEstado.dataset.id = usuario.id;
+                    botonEstado.dataset.activo = activo ? "0" : "1";
+
+                    acciones.append(botonEditar, botonEstado);
+                    celdaAcciones.appendChild(acciones);
+                    fila.appendChild(celdaAcciones);
+
+                    tabla.appendChild(fila);
+                });
+
+            } catch (error) {
+                tabla.innerHTML = "";
+
+                const fila = document.createElement("tr");
+                const celda = document.createElement("td");
+
+                celda.colSpan = 6;
+                celda.className = "text-center text-danger";
+                celda.textContent = error.message;
+
+                fila.appendChild(celda);
+                tabla.appendChild(fila);
+            }
+        }
+
+        // Registrar usuario
+        form.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const roles = Array.from(
+                document.querySelectorAll('#listaRoles input[name="roles"]:checked')
+            ).map(input => Number(input.value));
+
+            if (roles.length === 0) {
+                mostrarMensaje("Selecciona al menos un rol.", "warning");
+                return;
+            }
+
+            const datos = {
+                nombre: document.getElementById("nombre").value.trim(),
+                correo: document.getElementById("correo").value.trim(),
+                usuario: document.getElementById("usuario").value.trim(),
+                contrasena: document.getElementById("contrasena").value,
+                roles
+            };
+
+            const boton = document.getElementById("btnRegistrar");
+
+            try {
+                boton.disabled = true;
+                boton.textContent = "Registrando...";
+
+                const resultado = await consultarAPI("/usuarios", {
+                    method: "POST",
+                    body: JSON.stringify(datos)
+                });
+
+                mostrarMensaje(resultado.mensaje);
+                form.reset();
+                await cargarUsuarios();
+
+            } catch (error) {
+                mostrarMensaje(error.message, "danger");
+            } finally {
+                boton.disabled = false;
+                boton.textContent = "Registrar usuario";
+            }
+        });
+
+        // Abrir ventana de edición
+        function abrirEdicion(id) {
+            const usuario = usuariosActuales.find(
+                elemento => Number(elemento.id) === Number(id)
+            );
+
+            if (!usuario) {
+                mostrarMensaje("No se encontró el usuario.", "danger");
+                return;
+            }
+
+            document.getElementById("editarId").value = usuario.id;
+            document.getElementById("editarNombre").value = usuario.nombre;
+            document.getElementById("editarCorreo").value = usuario.correo;
+            document.getElementById("editarUsuario").value = usuario.usuario;
+
+            const rolesUsuario = (usuario.roles || []).map(rol =>
+                Number(typeof rol === "object" ? rol.id : rol)
+            );
+
+            listaRolesEditar.innerHTML = "";
+
+            rolesDisponibles.forEach(rol => {
+                crearCheckboxRol(rol, listaRolesEditar, rolesUsuario);
+            });
+
+            modalEditar.show();
+        }
+
+        // Guardar edición
+        formEditar.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const id = document.getElementById("editarId").value;
+
+            const roles = Array.from(
+                listaRolesEditar.querySelectorAll('input[name="roles"]:checked')
+            ).map(input => Number(input.value));
+
+            if (roles.length === 0) {
+                mostrarMensaje("Selecciona al menos un rol.", "warning");
+                return;
+            }
+
+            const datos = {
+                nombre: document.getElementById("editarNombre").value.trim(),
+                correo: document.getElementById("editarCorreo").value.trim(),
+                usuario: document.getElementById("editarUsuario").value.trim(),
+                roles
+            };
+
+            const boton = document.getElementById("btnGuardarEdicion");
+
+            try {
+                boton.disabled = true;
+                boton.textContent = "Guardando...";
+
+                const resultado = await consultarAPI(`/usuarios/${id}`, {
+                    method: "PUT",
+                    body: JSON.stringify(datos)
+                });
+
+                modalEditar.hide();
+                mostrarMensaje(resultado.mensaje);
+                await cargarUsuarios();
+
+            } catch (error) {
+                mostrarMensaje(error.message, "danger");
+            } finally {
+                boton.disabled = false;
+                boton.textContent = "Guardar cambios";
+            }
+        });
+
+        // Activar o desactivar usuario
+        async function cambiarEstado(id, activo) {
+            const accion = activo === 1 ? "activar" : "desactivar";
+
+            if (!confirm(`¿Seguro que deseas ${accion} este usuario?`)) {
+                return;
+            }
+
+            try {
+                const resultado = await consultarAPI(`/usuarios/${id}/estado`, {
+                    method: "PATCH",
+                    body: JSON.stringify({ activo })
+                });
+
+                mostrarMensaje(resultado.mensaje);
+                await cargarUsuarios();
+
+            } catch (error) {
+                mostrarMensaje(error.message, "danger");
+            }
+        }
+
+        // Detectar clics en los botones de la tabla
+        tabla.addEventListener("click", event => {
+            const boton = event.target.closest("button[data-accion]");
+
+            if (!boton) return;
+
+            const id = boton.dataset.id;
+
+            if (boton.dataset.accion === "editar") {
+                abrirEdicion(id);
+            }
+
+            if (boton.dataset.accion === "estado") {
+                cambiarEstado(id, Number(boton.dataset.activo));
+            }
+        });
+
+        document.getElementById("btnActualizar").addEventListener(
+            "click",
+            cargarUsuarios
+        );
+
+        async function iniciarPagina() {
+            if (!token) {
+                mostrarMensaje(
+                    "Debes iniciar sesión para acceder a este módulo.",
+                    "warning"
+                );
+                return;
+            }
+
+            await Promise.all([
+                cargarRoles(),
+                cargarUsuarios()
+            ]);
+        }
+
+        iniciarPagina();
+    </script>
 
 </body>
 </html>
